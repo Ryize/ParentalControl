@@ -1,61 +1,3 @@
-# import sys
-#
-# from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton
-#
-# class MainWindow(QMainWindow):
-#     def __init__(self):
-#         super().__init__()
-#
-#         self.setWindowTitle("Пример окна на PyQt5")
-#
-#         self.label = QLabel(self)
-#         self.label.setText("Введите длину (в см, м или км):" )
-#         self.label.move(20, 20)
-#
-#         self.input = QLineEdit(self)
-#         self.input.move(20, 50)
-#         self.input.resize(200, 30)
-#
-#         self.button = QPushButton(self)
-#         self.button.setText("Проверить")
-#         self.button.move(20, 100)
-#         self.button.clicked.connect(self.validate)
-#
-#     def validate(self):
-#         # разделение строки на число и единицы измерения
-#         parts = self..split('_')
-#         if len(parts) != 2:
-#             return False
-#
-#         # разделение единиц измерения на отдельные элементы
-#         units = parts[1].split()
-#         if len(units) > 2:
-#             return False
-#
-#         # проверка, что каждый элемент единиц измерения является допустимым
-#         for unit in units:
-#             if unit not in ['см', 'м', 'км']:
-#                 return False
-#
-#         # проверка, что число является целым
-#         try:
-#             number = int(parts[0])
-#         except ValueError:
-#             return False
-#
-#         # проверка, что число положительное
-#         if number < 0:
-#             return False
-#
-#         return True
-#
-# if __name__ == "__main__":
-# app = QApplication([])
-# window = MainWindow()
-# window.show()
-# app.exec_()
-
-
 import getpass
 import platform
 import subprocess
@@ -64,17 +6,63 @@ import time
 import threading
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMessageBox, QWidget
 
 from custom_design import CustomDialog
-from design import UiMainWindow, UiDetailsWindow
+from design import UiMainWindow, UiDetailsWindow, UiAuthWindow, UiChildWindow, UiProgramWindow
 
 PLATFORM = platform.system().lower()
+
+IS_AUTH = True
 
 
 class DetailsWindow(QtWidgets.QMainWindow, UiDetailsWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+
+
+class ChildWindow(QtWidgets.QMainWindow, UiChildWindow):
+    def __init__(self, window):
+        self.parent_window = window
+        super().__init__()
+        self.setupUi(self)
+
+    def handler_parent(self, *args, **kwargs):
+        self.parent_window.show()
+        self.hide()
+
+
+class AuthWindow(QtWidgets.QMainWindow, UiAuthWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        self.window = ParentalControl()
+        self.child = ChildWindow(self)
+
+    def handler_auth_button(self):
+        if self.login.text() == 'admin' and self.password.text() == '1234':
+            self.window.show()
+            self.hide()
+            return
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Critical)
+        msg.setWindowTitle("Неверные данные")
+        msg.setText("Неверный логин/пароль!")
+        msg.setStandardButtons(QMessageBox.Ok)
+        msg.exec_()
+
+    def handler_child(self, *args, **kwargs):
+        self.hide()
+        self.child.show()
+
+    def handler_enter_by_telegram(self, *args, **kwargs):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+        msg.setWindowTitle("Отправка запроса")
+        msg.setText("В ваш телеграм отправлен запрос.\nНажмите на кнопку \"Да\"!")
+        msg.setStandardButtons(QMessageBox.Ok)
+        msg.exec_()
 
 
 class ParentalControl(QtWidgets.QMainWindow, UiMainWindow):
@@ -84,9 +72,10 @@ class ParentalControl(QtWidgets.QMainWindow, UiMainWindow):
         self.initUI()
         self.details = DetailsWindow()
 
+        self.goto("main")
+
     def initUI(self):
         self.setWindowTitle('Родительский контроль')
-        self.show()
 
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
@@ -142,14 +131,10 @@ class ParentalControl(QtWidgets.QMainWindow, UiMainWindow):
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
-    window = ParentalControl()
+    window = AuthWindow()
     window.show()
     app.exec_()
 
 
 if __name__ == '__main__':
     main()
-
-'Hello my name is John'
-
-r'm.*J'
