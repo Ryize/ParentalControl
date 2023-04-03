@@ -72,8 +72,6 @@ class ParentalControl(QtWidgets.QMainWindow, UiMainWindow):
         self.initUI()
         self.details = DetailsWindow()
 
-        self.goto("main")
-
     def initUI(self):
         self.setWindowTitle('Родительский контроль')
 
