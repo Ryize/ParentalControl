@@ -9,7 +9,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
 from custom_design import CustomDialog
-from design import UiMainWindow, UiDetailsWindow, UiAuthWindow, UiChildWindow, UiProgramWindow
+from design import UiMainWindow, UiDetailsWindow, UiAuthWindow, UiChildWindow, UiProgramWindow, UiInternetWindow, \
+    UiCommunicationWindow, UiControlWindow
 
 PLATFORM = platform.system().lower()
 
@@ -37,13 +38,13 @@ class AuthWindow(QtWidgets.QMainWindow, UiAuthWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.window = ParentalControl()
         self.child = ChildWindow(self)
 
     def handler_auth_button(self):
         if self.login.text() == 'admin' and self.password.text() == '1234':
+            self.window = ComputerControl()
             self.window.show()
-            self.hide()
+            self.destroy()
             return
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Critical)
@@ -65,7 +66,7 @@ class AuthWindow(QtWidgets.QMainWindow, UiAuthWindow):
         msg.exec_()
 
 
-class ParentalControl(QtWidgets.QMainWindow, UiMainWindow):
+class ComputerControl(QtWidgets.QMainWindow, UiMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -74,6 +75,30 @@ class ParentalControl(QtWidgets.QMainWindow, UiMainWindow):
 
     def initUI(self):
         self.setWindowTitle('Родительский контроль')
+        self.program_button.clicked.connect(self.change_computer)
+        self.internet_button.clicked.connect(self.change_internet)
+        self.communication_button.clicked.connect(self.change_communication)
+        self.content_button.clicked.connect(self.change_content)
+
+    def change_content(self):
+        self.communication = ContentWindow()
+        self.communication.show()
+        self.destroy()
+
+    def change_computer(self):
+        self.computer = ProgramWindow()
+        self.computer.show()
+        self.destroy()
+
+    def change_internet(self):
+        self.internet = InternetWindow()
+        self.internet.show()
+        self.destroy()
+
+    def change_communication(self):
+        self.communication = CommunicationWindow()
+        self.communication.show()
+        self.destroy()
 
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
@@ -125,6 +150,146 @@ class ParentalControl(QtWidgets.QMainWindow, UiMainWindow):
     def _auto_clear_status_bar(self, timeout: int):
         time.sleep(timeout)
         self.statusBar().showMessage('')
+
+
+class ProgramWindow(QtWidgets.QMainWindow, UiProgramWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        self.initUI()
+        self.child = ChildWindow(self)
+
+    def initUI(self):
+        self.setWindowTitle('Родительский контроль')
+        self.computer_button.clicked.connect(self.change_parental)
+        self.internet_button.clicked.connect(self.change_internet)
+        self.communication_button.clicked.connect(self.change_communication)
+        self.content_button.clicked.connect(self.change_content)
+
+    def change_content(self):
+        self.communication = ContentWindow()
+        self.communication.show()
+        self.destroy()
+
+    def change_parental(self):
+        self.parental = ComputerControl()
+        self.parental.show()
+        self.destroy()
+
+    def change_internet(self):
+        self.internet = InternetWindow()
+        self.internet.show()
+        self.destroy()
+
+    def change_communication(self):
+        self.communication = CommunicationWindow()
+        self.communication.show()
+        self.destroy()
+
+
+class InternetWindow(QtWidgets.QMainWindow, UiInternetWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        self.initUI()
+        self.child = ChildWindow(self)
+
+    def initUI(self):
+        self.setWindowTitle('Родительский контроль')
+        self.computer_button.clicked.connect(self.change_parental)
+        self.program_button.clicked.connect(self.change_computer)
+        self.communication_button.clicked.connect(self.change_communication)
+        self.content_button.clicked.connect(self.change_content)
+
+    def change_content(self):
+        self.communication = ContentWindow()
+        self.communication.show()
+        self.destroy()
+
+    def change_parental(self):
+        self.parental = ComputerControl()
+        self.parental.show()
+        self.destroy()
+
+    def change_computer(self):
+        self.program = ProgramWindow()
+        self.program.show()
+        self.destroy()
+
+    def change_communication(self):
+        self.communication = CommunicationWindow()
+        self.communication.show()
+        self.destroy()
+
+
+class CommunicationWindow(QtWidgets.QMainWindow, UiCommunicationWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        self.initUI()
+        self.child = ChildWindow(self)
+
+    def initUI(self):
+        self.setWindowTitle('Родительский контроль')
+        self.computer_button.clicked.connect(self.change_parental)
+        self.program_button.clicked.connect(self.change_computer)
+        self.internet_button.clicked.connect(self.change_internet)
+        self.content_button.clicked.connect(self.change_content)
+
+    def change_content(self):
+        self.communication = ContentWindow()
+        self.communication.show()
+        self.destroy()
+
+    def change_parental(self):
+        self.parental = ComputerControl()
+        self.parental.show()
+        self.destroy()
+
+    def change_computer(self):
+        self.program = ProgramWindow()
+        self.program.show()
+        self.destroy()
+
+    def change_internet(self):
+        self.program = InternetWindow()
+        self.program.show()
+        self.destroy()
+
+
+class ContentWindow(QtWidgets.QMainWindow, UiControlWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        self.initUI()
+        self.child = ChildWindow(self)
+
+    def initUI(self):
+        self.setWindowTitle('Родительский контроль')
+        self.computer_button.clicked.connect(self.change_parental)
+        self.program_button.clicked.connect(self.change_computer)
+        self.internet_button.clicked.connect(self.change_internet)
+        self.communication_button.clicked.connect(self.change_communication)
+
+    def change_communication(self):
+        self.communication = CommunicationWindow()
+        self.communication.show()
+        self.destroy()
+
+    def change_parental(self):
+        self.parental = ComputerControl()
+        self.parental.show()
+        self.destroy()
+
+    def change_computer(self):
+        self.program = ProgramWindow()
+        self.program.show()
+        self.destroy()
+
+    def change_internet(self):
+        self.program = InternetWindow()
+        self.program.show()
+        self.destroy()
 
 
 def main():

@@ -27,36 +27,41 @@ class UiMainWindow:
         self.computer_button.setStyleSheet("background-color: rgb(59, 130, 117);\n"
                                            "color: white;\n"
                                            "font-size: 16px;\n"
-                                           "border-radius: 5px;")
+                                           "border-radius: 5px;"
+                                           "cursor: pointer;")
         self.computer_button.setObjectName("pushButton")
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(10, 140, 171, 51))
-        self.pushButton_2.setStyleSheet("background-color: rgb(75, 165, 148);\n"
-                                        "color: white;\n"
-                                        "font-size: 16px;\n"
-                                        "border-radius: 5px;")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_3.setGeometry(QtCore.QRect(10, 230, 171, 51))
-        self.pushButton_3.setStyleSheet("background-color: rgb(75, 165, 148);\n"
-                                        "color: white;\n"
-                                        "font-size: 16px;\n"
-                                        "border-radius: 5px;")
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_4.setGeometry(QtCore.QRect(10, 320, 171, 51))
-        self.pushButton_4.setStyleSheet("background-color: rgb(75, 165, 148);\n"
-                                        "color: white;\n"
-                                        "font-size: 16px;\n"
-                                        "border-radius: 5px;")
-        self.pushButton_4.setObjectName("pushButton_4")
-        self.pushButton_5 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_5.setGeometry(QtCore.QRect(10, 400, 171, 51))
-        self.pushButton_5.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+        self.program_button = QtWidgets.QPushButton(self.centralwidget)
+        self.program_button.setGeometry(QtCore.QRect(10, 140, 171, 51))
+        self.program_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                          "color: white;\n"
+                                          "font-size: 16px;\n"
+                                          "border-radius: 5px;"
+                                          "cursor: pointer;")
+        self.program_button.setObjectName("pushButton_2")
+        self.internet_button = QtWidgets.QPushButton(self.centralwidget)
+        self.internet_button.setGeometry(QtCore.QRect(10, 230, 171, 51))
+        self.internet_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                           "color: white;\n"
+                                           "font-size: 16px;\n"
+                                           "border-radius: 5px;"
+                                           "cursor: pointer;")
+        self.internet_button.setObjectName("pushButton_3")
+        self.communication_button = QtWidgets.QPushButton(self.centralwidget)
+        self.communication_button.setGeometry(QtCore.QRect(10, 320, 171, 51))
+        self.communication_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                                "color: white;\n"
+                                                "font-size: 16px;\n"
+                                                "border-radius: 5px;"
+                                                "cursor: pointer;")
+        self.communication_button.setObjectName("pushButton_4")
+        self.content_button = QtWidgets.QPushButton(self.centralwidget)
+        self.content_button.setGeometry(QtCore.QRect(10, 400, 171, 51))
+        self.content_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
                                         "color: white;\n"
                                         "font-size: 15px;\n"
-                                        "border-radius: 5px;")
-        self.pushButton_5.setObjectName("pushButton_5")
+                                        "border-radius: 5px;"
+                                        "cursor: pointer;")
+        self.content_button.setObjectName("pushButton_5")
         self.button_details = QtWidgets.QPushButton(self.centralwidget)
         self.button_details.setGeometry(QtCore.QRect(20, 510, 111, 31))
         self.button_details.setObjectName("pushButton_6")
@@ -195,10 +200,10 @@ class UiMainWindow:
         self.label_4.setText(_translate("MainWindow", "Ограничение доступа с понедельника по пятницу"))
         self.turn_parental_control.setText(_translate("MainWindow", "Родительский контроль"))
         self.computer_button.setText(_translate("MainWindow", "Компьютер"))
-        self.pushButton_2.setText(_translate("MainWindow", "Программы"))
-        self.pushButton_3.setText(_translate("MainWindow", "Интернет"))
-        self.pushButton_4.setText(_translate("MainWindow", "Общение"))
-        self.pushButton_5.setText(_translate("MainWindow", "Контроль содержания"))
+        self.program_button.setText(_translate("MainWindow", "Программы"))
+        self.internet_button.setText(_translate("MainWindow", "Интернет"))
+        self.communication_button.setText(_translate("MainWindow", "Общение"))
+        self.content_button.setText(_translate("MainWindow", "Контроль содержания"))
         self.button_details.setText(_translate("MainWindow", "Подробнее..."))
         self.label.setText(_translate("MainWindow", f"{self.username} - текущий пользователь"))
         self.label_2.setText(_translate("MainWindow", "Рабочие дни"))
@@ -500,50 +505,55 @@ class UiProgramWindow:
         QWidget.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(QWidget)
         self.centralwidget.setObjectName("centralwidget")
-        self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox.setGeometry(QtCore.QRect(600, 20, 191, 20))
-        self.checkBox.setStyleSheet("border: 1px solid #adb5bd;\n"
-                                    "  border-radius: 0.25em;\n"
-                                    "  margin-right: 0.5em;\n"
-                                    "  background-repeat: no-repeat;\n"
-                                    "  background-position: center center;\n"
-                                    "  background-size: 50% 50%;")
-        self.checkBox.setObjectName("checkBox")
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(10, 50, 171, 51))
-        self.pushButton.setStyleSheet("background-color: rgb(75, 165, 148);\n"
-                                      "color: white;\n"
-                                      "font-size: 16px;\n"
-                                      "border-radius: 5px;")
-        self.pushButton.setObjectName("pushButton")
+        self.parental_button = QtWidgets.QCheckBox(self.centralwidget)
+        self.parental_button.setGeometry(QtCore.QRect(600, 20, 191, 20))
+        self.parental_button.setStyleSheet("border: 1px solid #adb5bd;\n"
+                                           "  border-radius: 0.25em;\n"
+                                           "  margin-right: 0.5em;\n"
+                                           "  background-repeat: no-repeat;\n"
+                                           "  background-position: center center;\n"
+                                           "  background-size: 50% 50%;")
+        self.parental_button.setObjectName("checkBox")
         self.computer_button = QtWidgets.QPushButton(self.centralwidget)
-        self.computer_button.setGeometry(QtCore.QRect(10, 140, 171, 51))
-        self.computer_button.setStyleSheet("background-color: rgb(59, 130, 117);\n"
+        self.computer_button.setGeometry(QtCore.QRect(10, 50, 171, 51))
+        self.computer_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
                                            "color: white;\n"
                                            "font-size: 16px;\n"
-                                           "border-radius: 5px;")
-        self.computer_button.setObjectName("pushButton_2")
-        self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_3.setGeometry(QtCore.QRect(10, 230, 171, 51))
-        self.pushButton_3.setStyleSheet("background-color: rgb(75, 165, 148);\n"
-                                        "color: white;\n"
-                                        "font-size: 16px;\n"
-                                        "border-radius: 5px;")
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_4.setGeometry(QtCore.QRect(10, 320, 171, 51))
-        self.pushButton_4.setStyleSheet("background-color: rgb(75, 165, 148);\n"
-                                        "color: white;\n"
-                                        "font-size: 16px;\n"
-                                        "border-radius: 5px;")
-        self.pushButton_4.setObjectName("pushButton_4")
-        self.pushButton_5 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_5.setGeometry(QtCore.QRect(10, 400, 171, 51))
-        self.pushButton_5.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                           "border-radius: 5px;"
+                                           "cursor: pointer;")
+        self.computer_button.setObjectName("pushButton")
+        self.program_button = QtWidgets.QPushButton(self.centralwidget)
+        self.program_button.setGeometry(QtCore.QRect(10, 140, 171, 51))
+        self.program_button.setStyleSheet("background-color: rgb(59, 130, 117);\n"
+                                          "color: white;\n"
+                                          "font-size: 16px;\n"
+                                          "border-radius: 5px;"
+                                          "cursor: pointer;")
+        self.program_button.setObjectName("pushButton_2")
+        self.internet_button = QtWidgets.QPushButton(self.centralwidget)
+        self.internet_button.setGeometry(QtCore.QRect(10, 230, 171, 51))
+        self.internet_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                           "color: white;\n"
+                                           "font-size: 16px;\n"
+                                           "border-radius: 5px;"
+                                           "cursor: pointer;")
+        self.internet_button.setObjectName("pushButton_3")
+        self.communication_button = QtWidgets.QPushButton(self.centralwidget)
+        self.communication_button.setGeometry(QtCore.QRect(10, 320, 171, 51))
+        self.communication_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                                "color: white;\n"
+                                                "font-size: 16px;\n"
+                                                "border-radius: 5px;"
+                                                "cursor: pointer;")
+        self.communication_button.setObjectName("pushButton_4")
+        self.content_button = QtWidgets.QPushButton(self.centralwidget)
+        self.content_button.setGeometry(QtCore.QRect(10, 400, 171, 51))
+        self.content_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
                                         "color: white;\n"
                                         "font-size: 15px;\n"
-                                        "border-radius: 5px;")
-        self.pushButton_5.setObjectName("pushButton_5")
+                                        "border-radius: 5px;"
+                                        "cursor: pointer;")
+        self.content_button.setObjectName("pushButton_5")
         self.pushButton_6 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_6.setGeometry(QtCore.QRect(20, 510, 111, 31))
         self.pushButton_6.setObjectName("pushButton_6")
@@ -615,17 +625,447 @@ class UiProgramWindow:
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.checkBox.setText(_translate("MainWindow", "Родительский контроль"))
-        self.pushButton.setText(_translate("MainWindow", "Компьютер"))
-        self.computer_button.setText(_translate("MainWindow", "Программы"))
-        self.pushButton_3.setText(_translate("MainWindow", "Интернет"))
-        self.pushButton_4.setText(_translate("MainWindow", "Общение"))
-        self.pushButton_5.setText(_translate("MainWindow", "Контроль содержания"))
+        self.parental_button.setText(_translate("MainWindow", "Родительский контроль"))
+        self.computer_button.setText(_translate("MainWindow", "Компьютер"))
+        self.program_button.setText(_translate("MainWindow", "Программы"))
+        self.internet_button.setText(_translate("MainWindow", "Интернет"))
+        self.communication_button.setText(_translate("MainWindow", "Общение"))
+        self.content_button.setText(_translate("MainWindow", "Контроль содержания"))
         self.pushButton_6.setText(_translate("MainWindow", "Подробнее..."))
         self.label.setText(_translate("MainWindow", "Чекашов Матвей - текущий пользователь"))
-        self.label_2.setText(_translate("MainWindow", "Введите название прогаммы и выберите её в списке"))
+        self.label_2.setText(_translate("MainWindow", "Введите название программы и выберите её в списке"))
         self.lineEdit.setPlaceholderText(_translate("MainWindow", "Название программы..."))
         self.label_3.setText(_translate("MainWindow", "Показать заблокированные программы"))
+        self.menu.setTitle(_translate("MainWindow", "Справка"))
+        self.menu_2.setTitle(_translate("MainWindow", "Справка"))
+        self.action.setText(_translate("MainWindow", "Читать"))
+
+
+class UiInternetWindow:
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(800, 600)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox.setGeometry(QtCore.QRect(600, 20, 191, 20))
+        self.checkBox.setStyleSheet("border: 1px solid #adb5bd;\n"
+                                    "  border-radius: 0.25em;\n"
+                                    "  margin-right: 0.5em;\n"
+                                    "  background-repeat: no-repeat;\n"
+                                    "  background-position: center center;\n"
+                                    "  background-size: 50% 50%;")
+        self.checkBox.setObjectName("checkBox")
+        self.computer_button = QtWidgets.QPushButton(self.centralwidget)
+        self.computer_button.setGeometry(QtCore.QRect(10, 50, 171, 51))
+        self.computer_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                           "color: white;\n"
+                                           "font-size: 16px;\n"
+                                           "border-radius: 5px;")
+        self.computer_button.setObjectName("pushButton")
+        self.program_button = QtWidgets.QPushButton(self.centralwidget)
+        self.program_button.setGeometry(QtCore.QRect(10, 140, 171, 51))
+        self.program_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                          "color: white;\n"
+                                          "font-size: 16px;\n"
+                                          "border-radius: 5px;")
+        self.program_button.setObjectName("pushButton_2")
+        self.internet_button = QtWidgets.QPushButton(self.centralwidget)
+        self.internet_button.setGeometry(QtCore.QRect(10, 230, 171, 51))
+        self.internet_button.setStyleSheet("background-color: rgb(59, 130, 117);\n"
+                                           "color: white;\n"
+                                           "font-size: 16px;\n"
+                                           "border-radius: 5px;")
+        self.internet_button.setObjectName("pushButton_3")
+        self.communication_button = QtWidgets.QPushButton(self.centralwidget)
+        self.communication_button.setGeometry(QtCore.QRect(10, 320, 171, 51))
+        self.communication_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                                "color: white;\n"
+                                                "font-size: 16px;\n"
+                                                "border-radius: 5px;")
+        self.communication_button.setObjectName("pushButton_4")
+        self.content_button = QtWidgets.QPushButton(self.centralwidget)
+        self.content_button.setGeometry(QtCore.QRect(10, 400, 171, 51))
+        self.content_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                        "color: white;\n"
+                                        "font-size: 15px;\n"
+                                        "border-radius: 5px;")
+        self.content_button.setObjectName("pushButton_5")
+        self.pushButton_6 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_6.setGeometry(QtCore.QRect(20, 510, 111, 31))
+        self.pushButton_6.setObjectName("pushButton_6")
+        self.line = QtWidgets.QFrame(self.centralwidget)
+        self.line.setGeometry(QtCore.QRect(10, 480, 171, 16))
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
+        self.line_2 = QtWidgets.QFrame(self.centralwidget)
+        self.line_2.setGeometry(QtCore.QRect(180, 50, 20, 511))
+        self.line_2.setFrameShape(QtWidgets.QFrame.VLine)
+        self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_2.setObjectName("line_2")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(10, 20, 271, 16))
+        self.label.setObjectName("label")
+        self.line_3 = QtWidgets.QFrame(self.centralwidget)
+        self.line_3.setGeometry(QtCore.QRect(10, 40, 781, 16))
+        self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_3.setObjectName("line_3")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(240, 60, 491, 51))
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        self.label_2.setFont(font)
+        self.label_2.setObjectName("label_2")
+        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit.setGeometry(QtCore.QRect(200, 190, 261, 41))
+        self.lineEdit.setText("")
+        self.lineEdit.setObjectName("lineEdit")
+        self.listWidget = QtWidgets.QListWidget(self.centralwidget)
+        self.listWidget.setGeometry(QtCore.QRect(490, 180, 311, 111))
+        self.listWidget.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.listWidget.setMouseTracking(False)
+        self.listWidget.setAutoFillBackground(False)
+        self.listWidget.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
+        self.listWidget.setObjectName("listWidget")
+        self.line_4 = QtWidgets.QFrame(self.centralwidget)
+        self.line_4.setGeometry(QtCore.QRect(470, 180, 16, 371))
+        self.line_4.setFrameShape(QtWidgets.QFrame.VLine)
+        self.line_4.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_4.setObjectName("line_4")
+        self.pushButton_7 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_7.setGeometry(QtCore.QRect(270, 250, 113, 41))
+        self.pushButton_7.setObjectName("pushButton_7")
+        self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_2.setGeometry(QtCore.QRect(200, 370, 261, 41))
+        self.lineEdit_2.setText("")
+        self.lineEdit_2.setObjectName("lineEdit_2")
+        self.pushButton_8 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_8.setGeometry(QtCore.QRect(270, 430, 113, 41))
+        self.pushButton_8.setObjectName("pushButton_8")
+        self.listWidget_2 = QtWidgets.QListWidget(self.centralwidget)
+        self.listWidget_2.setGeometry(QtCore.QRect(490, 360, 311, 111))
+        self.listWidget_2.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.listWidget_2.setMouseTracking(False)
+        self.listWidget_2.setAutoFillBackground(False)
+        self.listWidget_2.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
+        self.listWidget_2.setObjectName("listWidget_2")
+        self.line_5 = QtWidgets.QFrame(self.centralwidget)
+        self.line_5.setGeometry(QtCore.QRect(190, 310, 611, 16))
+        self.line_5.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_5.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_5.setObjectName("line_5")
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
+        self.menubar.setObjectName("menubar")
+        self.menu = QtWidgets.QMenu(self.menubar)
+        self.menu.setObjectName("menu")
+        self.menu_2 = QtWidgets.QMenu(self.menubar)
+        self.menu_2.setObjectName("menu_2")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+        self.action = QtWidgets.QAction(MainWindow)
+        self.action.setObjectName("action")
+        self.menu.addAction(self.action)
+        self.menubar.addAction(self.menu.menuAction())
+        self.menubar.addAction(self.menu_2.menuAction())
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.checkBox.setText(_translate("MainWindow", "Родительский контроль"))
+        self.computer_button.setText(_translate("MainWindow", "Компьютер"))
+        self.program_button.setText(_translate("MainWindow", "Программы"))
+        self.internet_button.setText(_translate("MainWindow", "Интернет"))
+        self.communication_button.setText(_translate("MainWindow", "Общение"))
+        self.content_button.setText(_translate("MainWindow", "Контроль содержания"))
+        self.pushButton_6.setText(_translate("MainWindow", "Подробнее..."))
+        self.label.setText(_translate("MainWindow", "Чекашов Матвей - текущий пользователь"))
+        self.label_2.setText(_translate("MainWindow", "Введите список запрещённых слов и сайтов"))
+        self.lineEdit.setPlaceholderText(_translate("MainWindow", "Введите слово..."))
+        self.pushButton_7.setText(_translate("MainWindow", "Добавить"))
+        self.lineEdit_2.setPlaceholderText(_translate("MainWindow", "Введите сайт..."))
+        self.pushButton_8.setText(_translate("MainWindow", "Добавить"))
+        self.menu.setTitle(_translate("MainWindow", "Справка"))
+        self.menu_2.setTitle(_translate("MainWindow", "Справка"))
+        self.action.setText(_translate("MainWindow", "Читать"))
+
+
+class UiCommunicationWindow:
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(800, 600)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox.setGeometry(QtCore.QRect(600, 20, 191, 20))
+        self.checkBox.setStyleSheet("border: 1px solid #adb5bd;\n"
+                                    "  border-radius: 0.25em;\n"
+                                    "  margin-right: 0.5em;\n"
+                                    "  background-repeat: no-repeat;\n"
+                                    "  background-position: center center;\n"
+                                    "  background-size: 50% 50%;")
+        self.checkBox.setObjectName("checkBox")
+        self.computer_button = QtWidgets.QPushButton(self.centralwidget)
+        self.computer_button.setGeometry(QtCore.QRect(10, 50, 171, 51))
+        self.computer_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                           "color: white;\n"
+                                           "font-size: 16px;\n"
+                                           "border-radius: 5px;")
+        self.computer_button.setObjectName("pushButton")
+        self.program_button = QtWidgets.QPushButton(self.centralwidget)
+        self.program_button.setGeometry(QtCore.QRect(10, 140, 171, 51))
+        self.program_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                          "color: white;\n"
+                                          "font-size: 16px;\n"
+                                          "border-radius: 5px;")
+        self.program_button.setObjectName("pushButton_2")
+        self.internet_button = QtWidgets.QPushButton(self.centralwidget)
+        self.internet_button.setGeometry(QtCore.QRect(10, 230, 171, 51))
+        self.internet_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                           "color: white;\n"
+                                           "font-size: 16px;\n"
+                                           "border-radius: 5px;")
+        self.internet_button.setObjectName("pushButton_3")
+        self.communication_button = QtWidgets.QPushButton(self.centralwidget)
+        self.communication_button.setGeometry(QtCore.QRect(10, 320, 171, 51))
+        self.communication_button.setStyleSheet("background-color: rgb(59, 130, 117);\n"
+                                                "color: white;\n"
+                                                "font-size: 16px;\n"
+                                                "border-radius: 5px;")
+        self.communication_button.setObjectName("pushButton_4")
+        self.content_button = QtWidgets.QPushButton(self.centralwidget)
+        self.content_button.setGeometry(QtCore.QRect(10, 400, 171, 51))
+        self.content_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                        "color: white;\n"
+                                        "font-size: 15px;\n"
+                                        "border-radius: 5px;")
+        self.content_button.setObjectName("pushButton_5")
+        self.pushButton_6 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_6.setGeometry(QtCore.QRect(20, 510, 111, 31))
+        self.pushButton_6.setObjectName("pushButton_6")
+        self.line = QtWidgets.QFrame(self.centralwidget)
+        self.line.setGeometry(QtCore.QRect(10, 480, 171, 16))
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
+        self.line_2 = QtWidgets.QFrame(self.centralwidget)
+        self.line_2.setGeometry(QtCore.QRect(180, 50, 20, 511))
+        self.line_2.setFrameShape(QtWidgets.QFrame.VLine)
+        self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_2.setObjectName("line_2")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(10, 20, 271, 16))
+        self.label.setObjectName("label")
+        self.line_3 = QtWidgets.QFrame(self.centralwidget)
+        self.line_3.setGeometry(QtCore.QRect(10, 40, 781, 16))
+        self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_3.setObjectName("line_3")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(240, 60, 491, 51))
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        self.label_2.setFont(font)
+        self.label_2.setObjectName("label_2")
+        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit.setGeometry(QtCore.QRect(200, 190, 261, 41))
+        self.lineEdit.setText("")
+        self.lineEdit.setObjectName("lineEdit")
+        self.listWidget = QtWidgets.QListWidget(self.centralwidget)
+        self.listWidget.setGeometry(QtCore.QRect(490, 180, 311, 301))
+        self.listWidget.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.listWidget.setMouseTracking(False)
+        self.listWidget.setAutoFillBackground(False)
+        self.listWidget.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
+        self.listWidget.setObjectName("listWidget")
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
+        self.menubar.setObjectName("menubar")
+        self.menu = QtWidgets.QMenu(self.menubar)
+        self.menu.setObjectName("menu")
+        self.menu_2 = QtWidgets.QMenu(self.menubar)
+        self.menu_2.setObjectName("menu_2")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+        self.action = QtWidgets.QAction(MainWindow)
+        self.action.setObjectName("action")
+        self.menu.addAction(self.action)
+        self.menubar.addAction(self.menu.menuAction())
+        self.menubar.addAction(self.menu_2.menuAction())
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.checkBox.setText(_translate("MainWindow", "Родительский контроль"))
+        self.computer_button.setText(_translate("MainWindow", "Компьютер"))
+        self.program_button.setText(_translate("MainWindow", "Программы"))
+        self.internet_button.setText(_translate("MainWindow", "Интернет"))
+        self.communication_button.setText(_translate("MainWindow", "Общение"))
+        self.content_button.setText(_translate("MainWindow", "Контроль содержания"))
+        self.pushButton_6.setText(_translate("MainWindow", "Подробнее..."))
+        self.label.setText(_translate("MainWindow", "Чекашов Матвей - текущий пользователь"))
+        self.label_2.setText(_translate("MainWindow", "Введите список программ, доступ к которым будет всегда"))
+        self.lineEdit.setPlaceholderText(_translate("MainWindow", "Введите название программы..."))
+        self.menu.setTitle(_translate("MainWindow", "Справка"))
+        self.menu_2.setTitle(_translate("MainWindow", "Справка"))
+        self.action.setText(_translate("MainWindow", "Читать"))
+
+
+class UiControlWindow:
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(800, 600)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox.setGeometry(QtCore.QRect(600, 20, 191, 20))
+        self.checkBox.setStyleSheet("border: 1px solid #adb5bd;\n"
+                                    "  border-radius: 0.25em;\n"
+                                    "  margin-right: 0.5em;\n"
+                                    "  background-repeat: no-repeat;\n"
+                                    "  background-position: center center;\n"
+                                    "  background-size: 50% 50%;")
+        self.checkBox.setObjectName("checkBox")
+        self.computer_button = QtWidgets.QPushButton(self.centralwidget)
+        self.computer_button.setGeometry(QtCore.QRect(10, 50, 171, 51))
+        self.computer_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                      "color: white;\n"
+                                      "font-size: 16px;\n"
+                                      "border-radius: 5px;")
+        self.computer_button.setObjectName("pushButton")
+        self.program_button = QtWidgets.QPushButton(self.centralwidget)
+        self.program_button.setGeometry(QtCore.QRect(10, 140, 171, 51))
+        self.program_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                        "color: white;\n"
+                                        "font-size: 16px;\n"
+                                        "border-radius: 5px;")
+        self.program_button.setObjectName("pushButton_2")
+        self.internet_button = QtWidgets.QPushButton(self.centralwidget)
+        self.internet_button.setGeometry(QtCore.QRect(10, 230, 171, 51))
+        self.internet_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                        "color: white;\n"
+                                        "font-size: 16px;\n"
+                                        "border-radius: 5px;")
+        self.internet_button.setObjectName("pushButton_3")
+        self.communication_button = QtWidgets.QPushButton(self.centralwidget)
+        self.communication_button.setGeometry(QtCore.QRect(10, 320, 171, 51))
+        self.communication_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
+                                        "color: white;\n"
+                                        "font-size: 16px;\n"
+                                        "border-radius: 5px;")
+        self.communication_button.setObjectName("pushButton_4")
+        self.content_button = QtWidgets.QPushButton(self.centralwidget)
+        self.content_button.setGeometry(QtCore.QRect(10, 400, 171, 51))
+        self.content_button.setStyleSheet("background-color: rgb(59, 130, 117);\n"
+                                        "color: white;\n"
+                                        "font-size: 15px;\n"
+                                        "border-radius: 5px;")
+        self.content_button.setObjectName("pushButton_5")
+        self.pushButton_6 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_6.setGeometry(QtCore.QRect(20, 510, 111, 31))
+        self.pushButton_6.setObjectName("pushButton_6")
+        self.line = QtWidgets.QFrame(self.centralwidget)
+        self.line.setGeometry(QtCore.QRect(10, 480, 171, 16))
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
+        self.line_2 = QtWidgets.QFrame(self.centralwidget)
+        self.line_2.setGeometry(QtCore.QRect(180, 50, 20, 511))
+        self.line_2.setFrameShape(QtWidgets.QFrame.VLine)
+        self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_2.setObjectName("line_2")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(10, 20, 271, 16))
+        self.label.setObjectName("label")
+        self.line_3 = QtWidgets.QFrame(self.centralwidget)
+        self.line_3.setGeometry(QtCore.QRect(10, 40, 781, 16))
+        self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_3.setObjectName("line_3")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(240, 60, 491, 31))
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        self.label_2.setFont(font)
+        self.label_2.setObjectName("label_2")
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setGeometry(QtCore.QRect(240, 90, 491, 31))
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        self.label_3.setFont(font)
+        self.label_3.setObjectName("label_3")
+        self.label_4 = QtWidgets.QLabel(self.centralwidget)
+        self.label_4.setGeometry(QtCore.QRect(240, 120, 491, 31))
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        self.label_4.setFont(font)
+        self.label_4.setObjectName("label_4")
+        self.label_5 = QtWidgets.QLabel(self.centralwidget)
+        self.label_5.setGeometry(QtCore.QRect(240, 150, 491, 31))
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        self.label_5.setFont(font)
+        self.label_5.setObjectName("label_5")
+        self.checkBox_2 = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox_2.setGeometry(QtCore.QRect(240, 230, 321, 20))
+        self.checkBox_2.setStyleSheet("border: 1px solid #adb5bd;\n"
+                                      "  border-radius: 0.25em;\n"
+                                      "  margin-right: 0.5em;\n"
+                                      "  background-repeat: no-repeat;\n"
+                                      "  background-position: center center;\n"
+                                      "  background-size: 50% 50%;")
+        self.checkBox_2.setObjectName("checkBox_2")
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
+        self.menubar.setObjectName("menubar")
+        self.menu = QtWidgets.QMenu(self.menubar)
+        self.menu.setObjectName("menu")
+        self.menu_2 = QtWidgets.QMenu(self.menubar)
+        self.menu_2.setObjectName("menu_2")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+        self.action = QtWidgets.QAction(MainWindow)
+        self.action.setObjectName("action")
+        self.menu.addAction(self.action)
+        self.menubar.addAction(self.menu.menuAction())
+        self.menubar.addAction(self.menu_2.menuAction())
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.checkBox.setText(_translate("MainWindow", "Родительский контроль"))
+        self.computer_button.setText(_translate("MainWindow", "Компьютер"))
+        self.program_button.setText(_translate("MainWindow", "Программы"))
+        self.internet_button.setText(_translate("MainWindow", "Интернет"))
+        self.communication_button.setText(_translate("MainWindow", "Общение"))
+        self.content_button.setText(_translate("MainWindow", "Контроль содержания"))
+        self.pushButton_6.setText(_translate("MainWindow", "Подробнее..."))
+        self.label.setText(_translate("MainWindow", "Чекашов Матвей - текущий пользователь"))
+        self.label_2.setText(_translate("MainWindow", "Если видео на платформе «YouTube» будет помечено"))
+        self.label_3.setText(_translate("MainWindow", "меткой (пример: насилие и жестокость, нецензурная"))
+        self.label_4.setText(_translate("MainWindow", "лексика и т.д,), то уведомление о просмотре данного "))
+        self.label_5.setText(_translate("MainWindow", "видео должны отправляться в Телеграмм."))
+        self.checkBox_2.setText(_translate("MainWindow", "Включить режим \"Контроль содержания\""))
         self.menu.setTitle(_translate("MainWindow", "Справка"))
         self.menu_2.setTitle(_translate("MainWindow", "Справка"))
         self.action.setText(_translate("MainWindow", "Читать"))
