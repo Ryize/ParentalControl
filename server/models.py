@@ -34,8 +34,25 @@ class ConfirmLogin(BaseModel):
 
 
 class AccountLinking(BaseModel):
-    user = pw.ForeignKeyField(User, related_name='confirm_login')
+    user = pw.ForeignKeyField(User, related_name='account_linking')
     os_info = pw.CharField(max_length=256, null=False)
+
+
+class ControlDate(BaseModel):
+    user = pw.ForeignKeyField(User, related_name='control_date')
+    monday = pw.CharField(max_length=5, default='24:00')
+    tuesday = pw.CharField(max_length=5, default='24:00')
+    wednesday = pw.CharField(max_length=5, default='24:00')
+    thursday = pw.CharField(max_length=5, default='24:00')
+    friday = pw.CharField(max_length=5, default='24:00')
+    saturday = pw.CharField(max_length=5, default='24:00')
+    sunday = pw.CharField(max_length=5, default='24:00')
+
+
+class Adjustment(BaseModel):
+    user = pw.ForeignKeyField(User, related_name='control_date')
+    time = pw.CharField(max_length=5)
+    done = pw.BooleanField(default=False)
 
 
 User.create_table()

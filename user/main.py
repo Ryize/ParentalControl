@@ -14,16 +14,66 @@ from user.auth_model import ConfirmLogin, User
 
 PLATFORM = platform.system().lower()
 
+_LOGIN = User.get_or_none(User.mac == MAC).login or 'Аноним'
+
 IS_AUTH = True
+
+
+class BaseWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        self.setWindowFlags(
+            QtCore.Qt.Window |
+            QtCore.Qt.CustomizeWindowHint |
+            QtCore.Qt.WindowTitleHint |
+            QtCore.Qt.WindowMinimizeButtonHint
+        )
+        try:
+            self.initUI()
+            self.button_details.clicked.connect(self.handler_details)
+        except AttributeError:
+            pass
+
+        self.details = DetailsWindow()
+        _translate = QtCore.QCoreApplication.translate
+        self.label.setText(_translate("MainWindow", f"{_LOGIN} - текущий пользователь"))
+
+    def handler_details(self):
+        self.details.show()
+
+    def handler_turn_parental_control(self):
+        if self.turn_parental_control.isChecked():
+            self.statusBar().showMessage('Вы включили родительский контроль!')
+        else:
+            self.statusBar().showMessage('Вы выключили родительский контроль!')
+        self.auto_clear_status_bar()
+
+    def auto_clear_status_bar(self, timeout: int = 5):
+        thread = threading.Thread(target=self._auto_clear_status_bar, args=(timeout,))
+        thread.start()
+
+    def closeEvent(self, event):
+        event.ignore()
+
+    def _auto_clear_status_bar(self, timeout: int):
+        time.sleep(timeout)
+        self.statusBar().showMessage('')
 
 
 class DetailsWindow(QtWidgets.QMainWindow, UiDetailsWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.setWindowFlags(
+            QtCore.Qt.Window |
+            QtCore.Qt.CustomizeWindowHint |
+            QtCore.Qt.WindowTitleHint |
+            QtCore.Qt.WindowMinimizeButtonHint
+        )
 
 
-class ChildWindow(QtWidgets.QMainWindow, UiChildWindow):
+class ChildWindow(BaseWindow, UiChildWindow):
     def __init__(self, window):
         self.parent_window = window
         super().__init__()
@@ -34,7 +84,7 @@ class ChildWindow(QtWidgets.QMainWindow, UiChildWindow):
         self.hide()
 
 
-class AuthWindow(QtWidgets.QMainWindow, UiAuthWindow):
+class AuthWindow(BaseWindow, UiAuthWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -84,36 +134,6 @@ class AuthWindow(QtWidgets.QMainWindow, UiAuthWindow):
                 self.window = ComputerControl()
                 self.window.show()
                 self.destroy()
-
-
-class BaseWindow(QtWidgets.QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
-        self.initUI()
-        self.button_details.clicked.connect(self.handler_details)
-        self.details = DetailsWindow()
-        self._login = User.get_or_none(User.mac == MAC).login
-        _translate = QtCore.QCoreApplication.translate
-        self.label.setText(_translate("MainWindow", f"{self._login} - текущий пользователь"))
-
-    def handler_details(self):
-        self.details.show()
-
-    def handler_turn_parental_control(self):
-        if self.turn_parental_control.isChecked():
-            self.statusBar().showMessage('Вы включили родительский контроль!')
-        else:
-            self.statusBar().showMessage('Вы выключили родительский контроль!')
-        self.auto_clear_status_bar()
-
-    def auto_clear_status_bar(self, timeout: int = 5):
-        thread = threading.Thread(target=self._auto_clear_status_bar, args=(timeout,))
-        thread.start()
-
-    def _auto_clear_status_bar(self, timeout: int):
-        time.sleep(timeout)
-        self.statusBar().showMessage('')
 
 
 class ComputerControl(BaseWindow, UiMainWindow):
