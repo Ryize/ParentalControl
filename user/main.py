@@ -1,16 +1,16 @@
-import getpass
 import platform
-import subprocess
 import sys
 import time
 import threading
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PyQt5.QtWidgets import QMessageBox
 
 from custom_design import CustomDialog
 from design import UiMainWindow, UiDetailsWindow, UiAuthWindow, UiChildWindow, UiProgramWindow, UiInternetWindow, \
     UiCommunicationWindow, UiControlWindow
+from user.auth import AuthSystem, MAC
+from user.auth_model import ConfirmLogin, User
 
 PLATFORM = platform.system().lower()
 
@@ -41,7 +41,7 @@ class AuthWindow(QtWidgets.QMainWindow, UiAuthWindow):
         self.child = ChildWindow(self)
 
     def handler_auth_button(self):
-        if self.login.text() == 'admin' and self.password.text() == '1234':
+        if AuthSystem.authorize_by_data(self.login.text(), self.password.text()):
             self.window = ComputerControl()
             self.window.show()
             self.destroy()
@@ -58,21 +58,58 @@ class AuthWindow(QtWidgets.QMainWindow, UiAuthWindow):
         self.child.show()
 
     def handler_enter_by_telegram(self, *args, **kwargs):
-        msg = QMessageBox()
-        msg.setIcon(QMessageBox.Information)
-        msg.setWindowTitle("Отправка запроса")
-        msg.setText("В ваш телеграм отправлен запрос.\nНажмите на кнопку \"Да\"!")
-        msg.setStandardButtons(QMessageBox.Ok)
-        msg.exec_()
+        AuthSystem.authorize_by_telegram()
+        dlg = CustomDialog('Выход',
+                           'В ваш телеграм отправлен запрос.\nНажмите на кнопку \"✅ Это я\".\n‼️После нажатия нажмите в этом окне \"Ок\"')
+        if dlg.exec():
+            user = User.get_or_none(User.mac == MAC)
+            conf = ConfirmLogin.get_or_none(ConfirmLogin.user == user)
+            if not conf:
+                pass
+            if conf.status == 0:
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Critical)
+                msg.setWindowTitle("Отказ доступа")
+                msg.setText("❌ Ваш запрос отклонили!")
+                msg.setStandardButtons(QMessageBox.Ok)
+                msg.exec_()
+            elif conf.status == 1:
+                self.window = ComputerControl()
+                self.window.show()
+                self.destroy()
 
 
-class ComputerControl(QtWidgets.QMainWindow, UiMainWindow):
+class BaseWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.initUI()
+        self.button_details.clicked.connect(self.handler_details)
         self.details = DetailsWindow()
+        self._login = User.get_or_none(User.mac == MAC).login
+        _translate = QtCore.QCoreApplication.translate
+        self.label.setText(_translate("MainWindow", f"{self._login} - текущий пользователь"))
 
+    def handler_details(self):
+        self.details.show()
+
+    def handler_turn_parental_control(self):
+        if self.turn_parental_control.isChecked():
+            self.statusBar().showMessage('Вы включили родительский контроль!')
+        else:
+            self.statusBar().showMessage('Вы выключили родительский контроль!')
+        self.auto_clear_status_bar()
+
+    def auto_clear_status_bar(self, timeout: int = 5):
+        thread = threading.Thread(target=self._auto_clear_status_bar, args=(timeout,))
+        thread.start()
+
+    def _auto_clear_status_bar(self, timeout: int):
+        time.sleep(timeout)
+        self.statusBar().showMessage('')
+
+
+class ComputerControl(BaseWindow, UiMainWindow):
     def initUI(self):
         self.setWindowTitle('Родительский контроль')
         self.program_button.clicked.connect(self.change_computer)
@@ -123,16 +160,6 @@ class ComputerControl(QtWidgets.QMainWindow, UiMainWindow):
                 #     command = f"killall Discord"
                 #     subprocess.run(command, shell=True)
 
-    def handler_details(self):
-        self.details.show()
-
-    def handler_turn_parental_control(self):
-        if self.turn_parental_control.isChecked():
-            self.statusBar().showMessage('Вы включили родительский контроль!')
-        else:
-            self.statusBar().showMessage('Вы выключили родительский контроль!')
-        self.auto_clear_status_bar()
-
     def limit_time(self):
         sender = self.sender()
         text = sender.text()
@@ -143,22 +170,8 @@ class ComputerControl(QtWidgets.QMainWindow, UiMainWindow):
             self.statusBar().showMessage(f'Вы сняли ограничение {text.split(" ")[-1]}')
         self.auto_clear_status_bar(3)
 
-    def auto_clear_status_bar(self, timeout: int = 5):
-        thread = threading.Thread(target=self._auto_clear_status_bar, args=(timeout,))
-        thread.start()
 
-    def _auto_clear_status_bar(self, timeout: int):
-        time.sleep(timeout)
-        self.statusBar().showMessage('')
-
-
-class ProgramWindow(QtWidgets.QMainWindow, UiProgramWindow):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
-        self.initUI()
-        self.child = ChildWindow(self)
-
+class ProgramWindow(BaseWindow, UiProgramWindow):
     def initUI(self):
         self.setWindowTitle('Родительский контроль')
         self.computer_button.clicked.connect(self.change_parental)
@@ -187,13 +200,7 @@ class ProgramWindow(QtWidgets.QMainWindow, UiProgramWindow):
         self.destroy()
 
 
-class InternetWindow(QtWidgets.QMainWindow, UiInternetWindow):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
-        self.initUI()
-        self.child = ChildWindow(self)
-
+class InternetWindow(BaseWindow, UiInternetWindow):
     def initUI(self):
         self.setWindowTitle('Родительский контроль')
         self.computer_button.clicked.connect(self.change_parental)
@@ -222,13 +229,7 @@ class InternetWindow(QtWidgets.QMainWindow, UiInternetWindow):
         self.destroy()
 
 
-class CommunicationWindow(QtWidgets.QMainWindow, UiCommunicationWindow):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
-        self.initUI()
-        self.child = ChildWindow(self)
-
+class CommunicationWindow(BaseWindow, UiCommunicationWindow):
     def initUI(self):
         self.setWindowTitle('Родительский контроль')
         self.computer_button.clicked.connect(self.change_parental)
@@ -257,13 +258,7 @@ class CommunicationWindow(QtWidgets.QMainWindow, UiCommunicationWindow):
         self.destroy()
 
 
-class ContentWindow(QtWidgets.QMainWindow, UiControlWindow):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
-        self.initUI()
-        self.child = ChildWindow(self)
-
+class ContentWindow(BaseWindow, UiControlWindow):
     def initUI(self):
         self.setWindowTitle('Родительский контроль')
         self.computer_button.clicked.connect(self.change_parental)
