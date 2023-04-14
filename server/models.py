@@ -33,6 +33,11 @@ class ConfirmLogin(BaseModel):
     status = pw.IntegerField(default=-1)
 
 
+class AccountLinking(BaseModel):
+    user = pw.ForeignKeyField(User, related_name='confirm_login')
+    os_info = pw.CharField(max_length=256, null=False)
+
+
 User.create_table()
 BotText.create_table()
 ConfirmLogin.create_table()

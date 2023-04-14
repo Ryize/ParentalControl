@@ -58,7 +58,14 @@ class AuthWindow(QtWidgets.QMainWindow, UiAuthWindow):
         self.child.show()
 
     def handler_enter_by_telegram(self, *args, **kwargs):
-        AuthSystem.authorize_by_telegram()
+        if not AuthSystem.authorize_by_telegram():
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setWindowTitle("Ошибка привязки")
+            msg.setText("❌ Программа ещё не привязана к телеграмму, авторизуйтесь с помощью логина и пароля!")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
+            return
         dlg = CustomDialog('Выход',
                            'В ваш телеграм отправлен запрос.\nНажмите на кнопку \"✅ Это я\".\n‼️После нажатия нажмите в этом окне \"Ок\"')
         if dlg.exec():
