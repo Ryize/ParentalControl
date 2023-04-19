@@ -11,10 +11,10 @@ class AuthSystem:
             User.password == password
         )
         if user:
-            if user.mac == '-1':
+            if user.mac != MAC:
                 user.mac = str(MAC)
                 user.save()
-            return user.mac == str(MAC)
+            return True
         return False
 
     @staticmethod

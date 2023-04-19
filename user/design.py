@@ -57,13 +57,13 @@ class UiMainWindow:
         self.content_button = QtWidgets.QPushButton(self.centralwidget)
         self.content_button.setGeometry(QtCore.QRect(10, 400, 171, 51))
         self.content_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
-                                        "color: white;\n"
-                                        "font-size: 15px;\n"
-                                        "border-radius: 5px;"
-                                        "cursor: pointer;")
+                                          "color: white;\n"
+                                          "font-size: 15px;\n"
+                                          "border-radius: 5px;"
+                                          "cursor: pointer;")
         self.content_button.setObjectName("pushButton_5")
         self.button_details = QtWidgets.QPushButton(self.centralwidget)
-        self.button_details.setGeometry(QtCore.QRect(20, 510, 111, 31))
+        self.button_details.setGeometry(QtCore.QRect(20, 500, 111, 31))
         self.button_details.setObjectName("pushButton_6")
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setGeometry(QtCore.QRect(10, 480, 171, 16))
@@ -101,12 +101,12 @@ class UiMainWindow:
                                              "  background-position: center center;\n"
                                              "  background-size: 50% 50%;")
         self.limit_time_monday.setObjectName("checkBox_2")
-        self.timeEdit = QtWidgets.QTimeEdit(self.centralwidget)
-        self.timeEdit.setGeometry(QtCore.QRect(470, 140, 118, 24))
-        self.timeEdit.setObjectName("timeEdit")
-        self.timeEdit_2 = QtWidgets.QTimeEdit(self.centralwidget)
-        self.timeEdit_2.setGeometry(QtCore.QRect(470, 180, 118, 24))
-        self.timeEdit_2.setObjectName("timeEdit_2")
+        self.limit_day = QtWidgets.QTimeEdit(self.centralwidget)
+        self.limit_day.setGeometry(QtCore.QRect(470, 140, 118, 24))
+        self.limit_day.setObjectName("limit_day")
+        self.limit_day_2 = QtWidgets.QTimeEdit(self.centralwidget)
+        self.limit_day_2.setGeometry(QtCore.QRect(470, 180, 118, 24))
+        self.limit_day_2.setObjectName("limit_day_2")
         self.limit_time_tuesday = QtWidgets.QCheckBox(self.centralwidget)
         self.limit_time_tuesday.setGeometry(QtCore.QRect(220, 180, 241, 20))
         self.limit_time_tuesday.setStyleSheet("border: 1px solid #adb5bd;\n"
@@ -116,9 +116,9 @@ class UiMainWindow:
                                               "  background-position: center center;\n"
                                               "  background-size: 50% 50%;")
         self.limit_time_tuesday.setObjectName("checkBox_3")
-        self.timeEdit_3 = QtWidgets.QTimeEdit(self.centralwidget)
-        self.timeEdit_3.setGeometry(QtCore.QRect(470, 220, 118, 24))
-        self.timeEdit_3.setObjectName("timeEdit_3")
+        self.limit_day_3 = QtWidgets.QTimeEdit(self.centralwidget)
+        self.limit_day_3.setGeometry(QtCore.QRect(470, 220, 118, 24))
+        self.limit_day_3.setObjectName("limit_day_3")
         self.limit_time_wednesday = QtWidgets.QCheckBox(self.centralwidget)
         self.limit_time_wednesday.setGeometry(QtCore.QRect(220, 220, 241, 20))
         self.limit_time_wednesday.setStyleSheet("border: 1px solid #adb5bd;\n"
@@ -128,9 +128,9 @@ class UiMainWindow:
                                                 "  background-position: center center;\n"
                                                 "  background-size: 50% 50%;")
         self.limit_time_wednesday.setObjectName("checkBox_4")
-        self.timeEdit_4 = QtWidgets.QTimeEdit(self.centralwidget)
-        self.timeEdit_4.setGeometry(QtCore.QRect(470, 260, 118, 24))
-        self.timeEdit_4.setObjectName("timeEdit_4")
+        self.limit_day_4 = QtWidgets.QTimeEdit(self.centralwidget)
+        self.limit_day_4.setGeometry(QtCore.QRect(470, 260, 118, 24))
+        self.limit_day_4.setObjectName("limit_day_4")
         self.limit_time_thursday = QtWidgets.QCheckBox(self.centralwidget)
         self.limit_time_thursday.setGeometry(QtCore.QRect(220, 260, 241, 20))
         self.limit_time_thursday.setStyleSheet("border: 1px solid #adb5bd;\n"
@@ -140,9 +140,9 @@ class UiMainWindow:
                                                "  background-position: center center;\n"
                                                "  background-size: 50% 50%;")
         self.limit_time_thursday.setObjectName("checkBox_5")
-        self.timeEdit_5 = QtWidgets.QTimeEdit(self.centralwidget)
-        self.timeEdit_5.setGeometry(QtCore.QRect(470, 300, 118, 24))
-        self.timeEdit_5.setObjectName("timeEdit_5")
+        self.limit_day_5 = QtWidgets.QTimeEdit(self.centralwidget)
+        self.limit_day_5.setGeometry(QtCore.QRect(470, 300, 118, 24))
+        self.limit_day_5.setObjectName("limit_day_5")
         self.limit_time_friday = QtWidgets.QCheckBox(self.centralwidget)
         self.limit_time_friday.setGeometry(QtCore.QRect(220, 300, 241, 20))
         self.limit_time_friday.setStyleSheet("border: 1px solid #adb5bd;\n"
@@ -152,9 +152,9 @@ class UiMainWindow:
                                              "  background-position: center center;\n"
                                              "  background-size: 50% 50%;")
         self.limit_time_friday.setObjectName("checkBox_6")
-        self.timeEdit_6 = QtWidgets.QTimeEdit(self.centralwidget)
-        self.timeEdit_6.setGeometry(QtCore.QRect(470, 460, 118, 24))
-        self.timeEdit_6.setObjectName("timeEdit_6")
+        self.limit_day_6 = QtWidgets.QTimeEdit(self.centralwidget)
+        self.limit_day_6.setGeometry(QtCore.QRect(470, 460, 118, 24))
+        self.limit_day_6.setObjectName("limit_day_6")
         self.limit_time_saturday = QtWidgets.QCheckBox(self.centralwidget)
         self.limit_time_saturday.setGeometry(QtCore.QRect(220, 460, 241, 20))
         self.limit_time_saturday.setStyleSheet("border: 1px solid #adb5bd;\n"
@@ -164,9 +164,9 @@ class UiMainWindow:
                                                "  background-position: center center;\n"
                                                "  background-size: 50% 50%;")
         self.limit_time_saturday.setObjectName("checkBox_7")
-        self.timeEdit_7 = QtWidgets.QTimeEdit(self.centralwidget)
-        self.timeEdit_7.setGeometry(QtCore.QRect(470, 490, 118, 24))
-        self.timeEdit_7.setObjectName("timeEdit_7")
+        self.limit_day_7 = QtWidgets.QTimeEdit(self.centralwidget)
+        self.limit_day_7.setGeometry(QtCore.QRect(470, 490, 118, 24))
+        self.limit_day_7.setObjectName("limit_day_7")
         self.limit_time_sunday = QtWidgets.QCheckBox(self.centralwidget)
         self.limit_time_sunday.setGeometry(QtCore.QRect(220, 490, 241, 20))
         self.limit_time_sunday.setStyleSheet("border: 1px solid #adb5bd;\n"
@@ -193,6 +193,9 @@ class UiMainWindow:
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+        for i in range(1, 8):
+            getattr(self, f'limit_day_{i}' if i != 1 else 'limit_day').timeChanged.connect(self.change_time)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -549,13 +552,13 @@ class UiProgramWindow:
         self.content_button = QtWidgets.QPushButton(self.centralwidget)
         self.content_button.setGeometry(QtCore.QRect(10, 400, 171, 51))
         self.content_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
-                                        "color: white;\n"
-                                        "font-size: 15px;\n"
-                                        "border-radius: 5px;"
-                                        "cursor: pointer;")
+                                          "color: white;\n"
+                                          "font-size: 15px;\n"
+                                          "border-radius: 5px;"
+                                          "cursor: pointer;")
         self.content_button.setObjectName("pushButton_5")
         self.button_details = QtWidgets.QPushButton(self.centralwidget)
-        self.button_details.setGeometry(QtCore.QRect(20, 510, 111, 31))
+        self.button_details.setGeometry(QtCore.QRect(20, 500, 111, 31))
         self.button_details.setObjectName("pushButton_6")
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setGeometry(QtCore.QRect(10, 480, 171, 16))
@@ -618,6 +621,16 @@ class UiProgramWindow:
         self.menu.addAction(self.action)
         self.menubar.addAction(self.menu.menuAction())
         self.menubar.addAction(self.menu_2.menuAction())
+
+        self.exit = QtWidgets.QLabel(self.centralwidget)
+        self.exit.setGeometry(QtCore.QRect(28, 545, 60, 16))
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        self.exit.setFont(font)
+        self.exit.setStyleSheet("color: #87CEEB;")
+        self.exit.setText("Выход")
+        self.exit.setObjectName("exit")
+        self.exit.mousePressEvent = self.handler_exit
 
         self.retranslateUi(QWidget)
         QtCore.QMetaObject.connectSlotsByName(QWidget)
@@ -688,12 +701,12 @@ class UiInternetWindow:
         self.content_button = QtWidgets.QPushButton(self.centralwidget)
         self.content_button.setGeometry(QtCore.QRect(10, 400, 171, 51))
         self.content_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
-                                        "color: white;\n"
-                                        "font-size: 15px;\n"
-                                        "border-radius: 5px;")
+                                          "color: white;\n"
+                                          "font-size: 15px;\n"
+                                          "border-radius: 5px;")
         self.content_button.setObjectName("pushButton_5")
         self.button_details = QtWidgets.QPushButton(self.centralwidget)
-        self.button_details.setGeometry(QtCore.QRect(20, 510, 111, 31))
+        self.button_details.setGeometry(QtCore.QRect(20, 500, 111, 31))
         self.button_details.setObjectName("pushButton_6")
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setGeometry(QtCore.QRect(10, 480, 171, 16))
@@ -846,12 +859,12 @@ class UiCommunicationWindow:
         self.content_button = QtWidgets.QPushButton(self.centralwidget)
         self.content_button.setGeometry(QtCore.QRect(10, 400, 171, 51))
         self.content_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
-                                        "color: white;\n"
-                                        "font-size: 15px;\n"
-                                        "border-radius: 5px;")
+                                          "color: white;\n"
+                                          "font-size: 15px;\n"
+                                          "border-radius: 5px;")
         self.content_button.setObjectName("pushButton_5")
         self.button_details = QtWidgets.QPushButton(self.centralwidget)
-        self.button_details.setGeometry(QtCore.QRect(20, 510, 111, 31))
+        self.button_details.setGeometry(QtCore.QRect(20, 500, 111, 31))
         self.button_details.setObjectName("pushButton_6")
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setGeometry(QtCore.QRect(10, 480, 171, 16))
@@ -946,40 +959,40 @@ class UiControlWindow:
         self.computer_button = QtWidgets.QPushButton(self.centralwidget)
         self.computer_button.setGeometry(QtCore.QRect(10, 50, 171, 51))
         self.computer_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
-                                      "color: white;\n"
-                                      "font-size: 16px;\n"
-                                      "border-radius: 5px;")
+                                           "color: white;\n"
+                                           "font-size: 16px;\n"
+                                           "border-radius: 5px;")
         self.computer_button.setObjectName("pushButton")
         self.program_button = QtWidgets.QPushButton(self.centralwidget)
         self.program_button.setGeometry(QtCore.QRect(10, 140, 171, 51))
         self.program_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
-                                        "color: white;\n"
-                                        "font-size: 16px;\n"
-                                        "border-radius: 5px;")
+                                          "color: white;\n"
+                                          "font-size: 16px;\n"
+                                          "border-radius: 5px;")
         self.program_button.setObjectName("pushButton_2")
         self.internet_button = QtWidgets.QPushButton(self.centralwidget)
         self.internet_button.setGeometry(QtCore.QRect(10, 230, 171, 51))
         self.internet_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
-                                        "color: white;\n"
-                                        "font-size: 16px;\n"
-                                        "border-radius: 5px;")
+                                           "color: white;\n"
+                                           "font-size: 16px;\n"
+                                           "border-radius: 5px;")
         self.internet_button.setObjectName("pushButton_3")
         self.communication_button = QtWidgets.QPushButton(self.centralwidget)
         self.communication_button.setGeometry(QtCore.QRect(10, 320, 171, 51))
         self.communication_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
-                                        "color: white;\n"
-                                        "font-size: 16px;\n"
-                                        "border-radius: 5px;")
+                                                "color: white;\n"
+                                                "font-size: 16px;\n"
+                                                "border-radius: 5px;")
         self.communication_button.setObjectName("pushButton_4")
         self.content_button = QtWidgets.QPushButton(self.centralwidget)
         self.content_button.setGeometry(QtCore.QRect(10, 400, 171, 51))
         self.content_button.setStyleSheet("background-color: rgb(59, 130, 117);\n"
-                                        "color: white;\n"
-                                        "font-size: 15px;\n"
-                                        "border-radius: 5px;")
+                                          "color: white;\n"
+                                          "font-size: 15px;\n"
+                                          "border-radius: 5px;")
         self.content_button.setObjectName("pushButton_5")
         self.button_details = QtWidgets.QPushButton(self.centralwidget)
-        self.button_details.setGeometry(QtCore.QRect(20, 510, 111, 31))
+        self.button_details.setGeometry(QtCore.QRect(20, 500, 111, 31))
         self.button_details.setObjectName("pushButton_6")
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setGeometry(QtCore.QRect(10, 480, 171, 16))

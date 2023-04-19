@@ -58,6 +58,8 @@ class Adjustment(BaseModel):
 User.create_table()
 BotText.create_table()
 ConfirmLogin.create_table()
+ControlDate.create_table()
+Adjustment.create_table()
 
 if __name__ == '__main__':
     User(telegram='test').save()
