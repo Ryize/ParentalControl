@@ -13,6 +13,10 @@ db = pw.MySQLDatabase(
 )
 
 
+def get_mac():
+    return str(get_mac())[:-1]
+
+
 class BaseModel(pw.Model):
     class Meta:
         database = db
@@ -49,7 +53,7 @@ class Adjustment(BaseModel):
 
 class TimeDaySession(BaseModel):
     user = pw.ForeignKeyField(User, related_name='control_date')
-    time = pw.CharField(max_length=5)
+    time = pw.CharField(max_length=5, default='00:00')
     day = pw.DateField(default=datetime.date.today)
 
 
@@ -57,6 +61,7 @@ User.create_table()
 ConfirmLogin.create_table()
 ControlDate.create_table()
 Adjustment.create_table()
+TimeDaySession.create_table()
 
 if __name__ == "__main__":
     User(telegram='test').save()

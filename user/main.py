@@ -1,3 +1,4 @@
+import datetime
 import platform
 import sys
 import threading
@@ -14,7 +15,7 @@ from PyQt5.QtWidgets import QMessageBox
 from custom_design import CustomDialog
 from design import UiAuthWindow, UiChildWindow
 from user.auth import AuthSystem, MAC
-from user.auth_model import ConfirmLogin, User
+from user.auth_model import ConfirmLogin, User, TimeDaySession
 
 PLATFORM = platform.system().lower()
 
@@ -57,7 +58,16 @@ class BaseWindow(QtWidgets.QMainWindow):
         self.exit.mousePressEvent = self.handler_exit
 
     def check_time_left(self):
-        print("Я тут!")
+        user = User.get(User.mac == MAC)
+        day_session = TimeDaySession.get_or_create(user=user, day=datetime.date.today())[0]
+        time_ = day_session.time
+        new_minute = int(time_.split(':')[1]) + 5
+        new_hour = int(time_.split(':')[0])
+        if new_minute >= 60:
+            new_minute = 0
+            new_hour += 1
+        day_session.time = f'{new_hour}:{new_minute}'
+        day_session.save()
 
     def handler_details(self):
         self.details.show()
@@ -119,7 +129,7 @@ class AuthWindow(BaseWindow, UiAuthWindow):
         self.setupUi(self)
         self.child = ChildWindow(self)
 
-        self.timer.setInterval(3000)  # 3 секунды
+        self.timer.setInterval(500)  # 3 секунды
         self.timer.timeout.connect(self.check_time_left)
         self.timer.start()
 

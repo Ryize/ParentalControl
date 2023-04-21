@@ -1,6 +1,6 @@
 from server.models import *
 
-MAC = get_mac()
+MAC = str(get_mac())[:-1]
 
 
 class AuthSystem:
@@ -12,7 +12,7 @@ class AuthSystem:
         )
         if user:
             if user.mac != MAC:
-                user.mac = str(MAC)
+                user.mac = str(MAC)[:-1]
                 user.save()
             return True
         return False
