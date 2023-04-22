@@ -26,6 +26,3 @@ class AuthSystem:
             i.delete_instance()
         ConfirmLogin.create(user=user)
         return True
-
-
-AuthSystem().authorize_by_telegram()

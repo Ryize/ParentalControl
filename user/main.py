@@ -1,4 +1,6 @@
+import calendar
 import datetime
+import os
 import platform
 import sys
 import threading
@@ -9,13 +11,13 @@ from PyQt5 import QtCore, QtGui
 from user.design import UiDetailsWindow
 
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtCore import QTimer, Qt
+from PyQt5.QtWidgets import QMessageBox, QSlider
 
 from custom_design import CustomDialog
 from design import UiAuthWindow, UiChildWindow
 from user.auth import AuthSystem, MAC
-from user.auth_model import ConfirmLogin, User, TimeDaySession
+from user.auth_model import ConfirmLogin, User, TimeDaySession, ControlDate
 
 PLATFORM = platform.system().lower()
 
@@ -29,6 +31,7 @@ IS_AUTH = True
 
 class BaseWindow(QtWidgets.QMainWindow):
     def __init__(self):
+        self.parent = self
         super().__init__()
         self.setupUi(self)
         self.setWindowFlags(
@@ -59,15 +62,47 @@ class BaseWindow(QtWidgets.QMainWindow):
 
     def check_time_left(self):
         user = User.get(User.mac == MAC)
-        day_session = TimeDaySession.get_or_create(user=user, day=datetime.date.today())[0]
+        date_today = datetime.date.today()
+        day_session = TimeDaySession.get_or_create(user=user, day=date_today)[0]
         time_ = day_session.time
-        new_minute = int(time_.split(':')[1]) + 5
+        if self._check_time_left():
+            self.child.setWindowFlag(Qt.WindowStaysOnTopHint, True)
+            self.child.show()
+            self.child.showMaximized()
+            return
+        if not self.child.isHidden():
+            self.child.setWindowFlag(Qt.WindowStaysOnTopHint, False)
+            self.child.show()
+            self.child.showNormal()
+
+        new_minute = int(time_.split(':')[1]) + 50
         new_hour = int(time_.split(':')[0])
         if new_minute >= 60:
             new_minute = 0
             new_hour += 1
         day_session.time = f'{new_hour}:{new_minute}'
         day_session.save()
+
+    def _check_time_left(self):
+        user = User.get(User.mac == MAC)
+        date_today = datetime.date.today()
+        day_session = TimeDaySession.get_or_create(user=user, day=date_today)[0]
+        time_ = day_session.time
+        if day_session:
+            minutes = int(time_.split(':')[0]) * 60 + int(time_.split(':')[1])
+            control_date = ControlDate.get_or_create(user=user)[0]
+            control_date.save()
+            max_time_this_day = getattr(control_date,
+                                        calendar.day_name[date_today.weekday()].lower())
+            print(int(time_.split(':')[0]))
+            if int(time_.split(':')[0]) >= 23:
+                print("!")
+                return False
+            print(int(max_time_this_day.split(':')[0]))
+            max_time_this_day = int(max_time_this_day.split(':')[0]) * 60 + int(max_time_this_day.split(':')[1])
+
+            if minutes >= max_time_this_day:
+                return True
 
     def handler_details(self):
         self.details.show()
@@ -122,16 +157,16 @@ class ChildWindow(BaseWindow, UiChildWindow):
 
 
 class AuthWindow(BaseWindow, UiAuthWindow):
-    timer = QTimer()
+    timer_add_time = QTimer()
 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.child = ChildWindow(self)
 
-        self.timer.setInterval(500)  # 3 секунды
-        self.timer.timeout.connect(self.check_time_left)
-        self.timer.start()
+        self.timer_add_time.setInterval(500)
+        self.timer_add_time.timeout.connect(self.check_time_left)
+        self.timer_add_time.start()
 
     def handler_auth_button(self):
         from user.computer import ComputerControl
