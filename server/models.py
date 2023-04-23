@@ -1,3 +1,5 @@
+import datetime
+
 import peewee as pw
 from uuid import getnode as get_mac
 
@@ -55,11 +57,18 @@ class Adjustment(BaseModel):
     done = pw.BooleanField(default=False)
 
 
+class TimeDaySession(BaseModel):
+    user = pw.ForeignKeyField(User, related_name='control_date')
+    time = pw.CharField(max_length=5, default='00:00')
+    day = pw.DateField(default=datetime.date.today)
+
+
 User.create_table()
 BotText.create_table()
 ConfirmLogin.create_table()
 ControlDate.create_table()
 Adjustment.create_table()
+TimeDaySession.create_table()
 
 if __name__ == '__main__':
     User(telegram='test').save()

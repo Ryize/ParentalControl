@@ -146,14 +146,72 @@ class DetailsWindow(QtWidgets.QMainWindow, UiDetailsWindow):
 
 
 class ChildWindow(BaseWindow, UiChildWindow):
+    timer_time_amount = QTimer()
+
     def __init__(self, window):
         super().__init__()
         self.parent_window = window
         self.setupUi(self)
 
+        self.timer_time_amount.setInterval(10000)
+        self.timer_time_amount.timeout.connect(self.check_time_amount)
+        self.timer_time_amount.start()
+
+        self.check_time_amount()
+
     def handler_parent(self, *args, **kwargs):
         self.parent_window.show()
         self.hide()
+
+    def check_time_amount(self):
+        user = User.get_or_none(User.mac == MAC)
+        if not user:
+            return
+        limit = ControlDate.get_or_none(ControlDate.user == user)
+        if not limit:
+            return
+        today = datetime.date.today()
+        day = calendar.day_name[today.weekday()].lower()
+        limit = getattr(limit, day)
+        session = TimeDaySession.get_or_none(TimeDaySession.user == user, TimeDaySession.day == today)
+        if not session:
+            hour, minute = self.get_humanize_time(limit)
+            self.label_2.setText(f'{hour} {minute}')
+            return
+        hour_limit = int(limit.split(':')[0])
+        minute_limit = int(limit.split(':')[1])
+
+        hour_session = int(session.time.split(':')[0])
+        minute_session = int(session.time.split(':')[1])
+
+        hour = '0 часов'
+        minute = '0 минут'
+
+        if hour_limit - hour_session > 0:
+            hour, _ = self.get_humanize_time(f'{hour_limit - hour_session}:1')
+        if minute_limit - minute_session > 0:
+            _, minute = self.get_humanize_time(f'1:{minute_limit - minute_session}')
+        self.label_2.setText(f'{hour} {minute}')
+
+    def get_humanize_time(self, time_):
+        _hour = int(time_.split(":")[0])
+        hour = f'{_hour} {self._correct_word(_hour, ("часов", "час", "часа",))}'
+        _minute = int(time_.split(":")[1])
+        minute = f'{_minute} {self._correct_word(_minute, ("минут", "минута", "минуты",))}'
+        return hour, minute
+
+    def _correct_word(self, number, lst):
+        assert len(lst) == 3
+        units = number % 10
+        tens = (number // 10) % 10
+        if tens == 1:
+            return lst[0]
+        if units in [0, 5, 6, 7, 8, 9]:
+            return lst[0]
+        if units == 1:
+            return lst[1]
+        if units in [2, 3, 4]:
+            return lst[2]
 
 
 class AuthWindow(BaseWindow, UiAuthWindow):
@@ -164,7 +222,7 @@ class AuthWindow(BaseWindow, UiAuthWindow):
         self.setupUi(self)
         self.child = ChildWindow(self)
 
-        self.timer_add_time.setInterval(500)
+        self.timer_add_time.setInterval(60000)
         self.timer_add_time.timeout.connect(self.check_time_left)
         self.timer_add_time.start()
 

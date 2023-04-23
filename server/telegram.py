@@ -1,3 +1,6 @@
+import calendar
+import locale
+
 import telebot
 import threading
 import time
@@ -10,6 +13,16 @@ from server.models import *
 bot = telebot.TeleBot(TOKEN)
 
 reg_users = {}
+
+russification_day_week = {
+    'monday': 'Понедельник',
+    'tuesday': 'Вторник',
+    'wednesday': 'Среда',
+    'thursday': 'Четверг',
+    'friday': 'Пятница',
+    'saturday': 'Суббота',
+    'sunday': 'Воскресенье',
+}
 
 
 @bot.message_handler(commands=['start'])
@@ -59,6 +72,7 @@ def callback_worker(call):
     if call.data in ('reg_check_no', 'reg_yes',):
         bot.register_next_step_handler(call.message, enter_login)
     elif call.data == 'reg_check_yes':
+        bot.send_message(chat_id, 'Выдаю вам клавиатуру ⌨️', reply_markup=get_standart_markup())
         login = reg_users[chat_id]['login']
         password = reg_users[chat_id]['password']
         User.create(mac='-1', telegram=chat_id, login=login, password=password)
@@ -82,6 +96,18 @@ def callback_worker(call):
         conf.status = 0
         conf.save()
         bot.send_message(chat_id, f'🚫 Мы запретили вход!')
+
+
+def get_standart_markup():
+    markup = types.ReplyKeyboardMarkup()
+    button_statistic = types.KeyboardButton('📊 Статистика')
+    button_limits = types.KeyboardButton('🕒 Лимиты')
+    button_time_now = types.KeyboardButton('🧑‍💻 Использовано')
+    button_block = types.KeyboardButton('⛔️ Заблокировать')
+    markup.add(button_statistic)
+    markup.add(button_limits, button_time_now)
+    markup.add(button_block)
+    return markup
 
 
 def msg_by_callback(callback_data: str, chat_id: int) -> None:
@@ -124,6 +150,117 @@ def check_confirm_login():
             login_confirm.status = -2
             login_confirm.save()
         time.sleep(1.5)
+
+
+@bot.message_handler(content_types=['text'])
+def keyboard_handler(message):
+    commands = {
+        '📊 Статистика': statistic,
+        '🕒 Лимиты': limit,
+        '🧑‍💻 Использовано': time_amount,
+        '⛔️ Заблокировать': block,
+    }
+    if commands.get(message.text):
+        commands[message.text](message)
+
+
+def number_of_days(date_1, date_2):
+    return (date_2 - date_1).days
+
+
+def correct_word(number, lst):
+    assert len(lst) == 3
+    units = number % 10
+    tens = (number // 10) % 10
+    if tens == 1:
+        return lst[0]
+    if units in [0, 5, 6, 7, 8, 9]:
+        return lst[0]
+    if units == 1:
+        return lst[1]
+    if units in [2, 3, 4]:
+        return lst[2]
+
+
+def statistic(message):
+    chat_id = message.chat.id
+    user = User.get_or_none(User.telegram == chat_id)
+    if not user:
+        bot.send_message(chat_id, 'Вы авторизованы!')
+        return
+    session = TimeDaySession.select().where(TimeDaySession.user == user)
+    result_str = '📊 Статистика использования компьютера за последнюю неделю:\n\n'
+    for i in session:
+        if number_of_days(i.day, datetime.date.today()) < 7:
+            day = calendar.day_name[i.day.weekday()].lower()
+            hour, minute = get_humanize_time(i.time)
+            result_str += f'{russification_day_week[day.lower()]} - {hour} {minute}\n'
+    bot.send_message(chat_id, result_str)
+
+
+def get_humanize_time(time_):
+    _hour = int(time_.split(":")[0])
+    hour = f'{_hour} {correct_word(_hour, ("часов", "час", "часа",))}'
+    _minute = int(time_.split(":")[1])
+    minute = f'{_minute} {correct_word(_minute, ("минут", "минута", "минуты",))}'
+    return hour, minute
+
+
+def limit(message):
+    chat_id = message.chat.id
+    user = User.get_or_none(User.telegram == chat_id)
+    if not user:
+        bot.send_message(chat_id, 'Вы авторизованы!')
+        return
+    limit = ControlDate.get_or_none(ControlDate.user == user)
+    if not limit:
+        bot.send_message(chat_id, 'Вы ещё не создали лимиты!')
+    result_str = 'Лимиты использования компьютера:\n\n'
+    for i in russification_day_week:
+        hour, minute = get_humanize_time(getattr(limit, i))
+        if hour.count('23') and minute.count('59'):
+            result_str += f'{russification_day_week[i]} - нет лимита\n'
+        else:
+            result_str += f'{russification_day_week[i]} - {hour} {minute}\n'
+    bot.send_message(chat_id, result_str)
+
+
+def time_amount(message):
+    chat_id = message.chat.id
+    user = User.get_or_none(User.telegram == chat_id)
+    if not user:
+        bot.send_message(chat_id, 'Вы авторизованы!')
+        return
+    limit = ControlDate.get_or_none(ControlDate.user == user)
+    if not limit:
+        bot.send_message(chat_id, 'Вы ещё не создали лимиты!')
+        return
+    today = datetime.date.today()
+    day = calendar.day_name[today.weekday()].lower()
+    limit = getattr(limit, day)
+    session = TimeDaySession.get_or_none(TimeDaySession.user == user, TimeDaySession.day == today)
+    if not session:
+        hour, minute = get_humanize_time(limit.time)
+        bot.send_message(chat_id, f'⏳ Осталось {hour} {minute} компьютерного времени')
+        return
+    hour_limit = int(limit.split(':')[0])
+    minute_limit = int(limit.split(':')[1])
+
+    hour_session = int(session.time.split(':')[0])
+    minute_session = int(session.time.split(':')[1])
+
+    hour = '0 часов'
+    minute = '0 минут'
+
+    if hour_limit - hour_session > 0:
+        hour, _ = get_humanize_time(f'{hour_limit - hour_session}:1')
+    if minute_limit - minute_session > 0:
+        _, minute = get_humanize_time(f'1:{minute_limit - minute_session}')
+    bot.send_message(chat_id, f'Осталось {hour} {minute} компьютерного времени')
+
+
+def block(message):
+    pass
 
 
 if __name__ == '__main__':
