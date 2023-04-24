@@ -7,6 +7,7 @@ import threading
 import time
 
 from PyQt5 import QtCore, QtGui
+from PyQt5.QtGui import QCursor
 
 from user.design import UiDetailsWindow
 
@@ -65,15 +66,6 @@ class BaseWindow(QtWidgets.QMainWindow):
         date_today = datetime.date.today()
         day_session = TimeDaySession.get_or_create(user=user, day=date_today)[0]
         time_ = day_session.time
-        if self._check_time_left():
-            self.child.setWindowFlag(Qt.WindowStaysOnTopHint, True)
-            self.child.show()
-            self.child.showMaximized()
-            return
-        if not self.child.isHidden():
-            self.child.setWindowFlag(Qt.WindowStaysOnTopHint, False)
-            self.child.show()
-            self.child.showNormal()
 
         new_minute = int(time_.split(':')[1]) + 50
         new_hour = int(time_.split(':')[0])
@@ -94,11 +86,6 @@ class BaseWindow(QtWidgets.QMainWindow):
             control_date.save()
             max_time_this_day = getattr(control_date,
                                         calendar.day_name[date_today.weekday()].lower())
-            print(int(time_.split(':')[0]))
-            if int(time_.split(':')[0]) >= 23:
-                print("!")
-                return False
-            print(int(max_time_this_day.split(':')[0]))
             max_time_this_day = int(max_time_this_day.split(':')[0]) * 60 + int(max_time_this_day.split(':')[1])
 
             if minutes >= max_time_this_day:
@@ -216,6 +203,7 @@ class ChildWindow(BaseWindow, UiChildWindow):
 
 class AuthWindow(BaseWindow, UiAuthWindow):
     timer_add_time = QTimer()
+    timer_stop_cursor = QTimer()
 
     def __init__(self):
         super().__init__()
@@ -225,6 +213,10 @@ class AuthWindow(BaseWindow, UiAuthWindow):
         self.timer_add_time.setInterval(60000)
         self.timer_add_time.timeout.connect(self.check_time_left)
         self.timer_add_time.start()
+
+        self.timer_stop_cursor.setInterval(3000)
+        self.timer_stop_cursor.timeout.connect(self.stop_cursor)
+        self.timer_stop_cursor.start()
 
     def handler_auth_button(self):
         from user.computer import ComputerControl
@@ -239,6 +231,19 @@ class AuthWindow(BaseWindow, UiAuthWindow):
         msg.setText("Неверный логин/пароль!")
         msg.setStandardButtons(QMessageBox.Ok)
         msg.exec_()
+
+    def stop_cursor(self):
+        if self._check_time_left():
+            self.child.setWindowFlag(Qt.WindowStaysOnTopHint, True)
+            self.child.show()
+            self.child.showMaximized()
+            p = QCursor()
+            p.setPos(self.child.request_time.x() + 100, self.child.request_time.y() + 100)
+            return
+        if not self.child.isHidden():
+            self.child.setWindowFlag(Qt.WindowStaysOnTopHint, False)
+            self.child.show()
+            self.child.showNormal()
 
     def handler_child(self, *args, **kwargs):
         self.hide()
