@@ -30,6 +30,10 @@ except AttributeError:
 IS_AUTH = True
 
 
+class Status:
+    time_stop: bool = False
+
+
 class BaseWindow(QtWidgets.QMainWindow):
     def __init__(self):
         self.parent = self
@@ -67,7 +71,7 @@ class BaseWindow(QtWidgets.QMainWindow):
         day_session = TimeDaySession.get_or_create(user=user, day=date_today)[0]
         time_ = day_session.time
 
-        new_minute = int(time_.split(':')[1]) + 50
+        new_minute = int(time_.split(':')[1]) + 1
         new_hour = int(time_.split(':')[0])
         if new_minute >= 60:
             new_minute = 0
@@ -151,6 +155,8 @@ class ChildWindow(BaseWindow, UiChildWindow):
         self.hide()
 
     def check_time_amount(self):
+        if Status.time_stop:
+            return
         user = User.get_or_none(User.mac == MAC)
         if not user:
             return
@@ -218,6 +224,10 @@ class AuthWindow(BaseWindow, UiAuthWindow):
         self.timer_stop_cursor.timeout.connect(self.stop_cursor)
         self.timer_stop_cursor.start()
 
+    def keyPressEvent(self, e):
+        if e.key() == 16777220:
+            self.handler_auth_button()
+
     def handler_auth_button(self):
         from user.computer import ComputerControl
         if AuthSystem.authorize_by_data(self.login.text(), self.password.text()):
@@ -239,11 +249,21 @@ class AuthWindow(BaseWindow, UiAuthWindow):
             self.child.showMaximized()
             p = QCursor()
             p.setPos(self.child.request_time.x() + 100, self.child.request_time.y() + 100)
+            width = self.child.size().width() // 2
+            self.child.label.move(width - self.child.label.width(), self.child.label.y())
+            self.child.label_2.move(width - self.child.label_2.width() + 375, self.child.label_2.y())
+            self.child.line.move(width - self.child.line.width() + 375, self.child.line.y())
+            self.child.request_time.move(width - self.child.request_time.width() + 175, self.child.request_time.y())
+            self.child.parent.move(width - self.child.parent.width() + 27, self.child.parent.y())
+
+            self.child.label_2.setText('Время вышло!')
+            Status.time_stop = True
             return
         if not self.child.isHidden():
             self.child.setWindowFlag(Qt.WindowStaysOnTopHint, False)
             self.child.show()
             self.child.showNormal()
+            Status.time_stop = False
 
     def handler_child(self, *args, **kwargs):
         self.hide()
