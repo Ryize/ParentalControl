@@ -1,5 +1,4 @@
 import calendar
-import locale
 
 import telebot
 import threading
@@ -9,6 +8,7 @@ from telebot import types
 from server.config import TOKEN
 
 from server.models import *
+from server.models import RequestTime
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -96,14 +96,33 @@ def callback_worker(call):
         conf.status = 0
         conf.save()
         bot.send_message(chat_id, f'🚫 Мы запретили вход!')
+    elif call.data.count('minute_'):
+        user = User.get_or_none(User.telegram == chat_id)
+        date_today = datetime.date.today()
+        request_time = RequestTime.select().where(
+            RequestTime.day == date_today,
+            RequestTime.user == user,
+        )
+        print(len(request_time))
+        if not request_time:
+            return
+        request_time = request_time[-1]
+        minute = call.data.split('_')[-1]
+        request_time.amount = minute
+        request_time.save()
+        bot.edit_message_text(f'✅ Вы успешно увеличили лимит для текущего дня на: {minute} минут!', chat_id=chat_id,
+                              message_id=call.message.message_id)
 
 
-def get_standart_markup():
+def get_standart_markup(block_status=False):
     markup = types.ReplyKeyboardMarkup()
     button_statistic = types.KeyboardButton('📊 Статистика')
     button_limits = types.KeyboardButton('🕒 Лимиты')
     button_time_now = types.KeyboardButton('🧑‍💻 Использовано')
-    button_block = types.KeyboardButton('⛔️ Заблокировать')
+    if block_status:
+        button_block = types.KeyboardButton('✅ Разблокировать')
+    else:
+        button_block = types.KeyboardButton('⛔️ Заблокировать')
     markup.add(button_statistic)
     markup.add(button_limits, button_time_now)
     markup.add(button_block)
@@ -149,6 +168,26 @@ def check_confirm_login():
             bot.send_message(login_confirm.user.telegram, 'Подтвердите вход', reply_markup=keyboard)
             login_confirm.status = -2
             login_confirm.save()
+        date_today = datetime.date.today()
+        for request_time in RequestTime.select().where(
+                RequestTime.is_send == False,
+                RequestTime.day == date_today,
+        ):
+            keyboard = types.InlineKeyboardMarkup()
+            minute_5 = types.InlineKeyboardButton(text='5', callback_data=f'minute_5')
+            minute_15 = types.InlineKeyboardButton(text='15', callback_data=f'minute_15')
+            minute_30 = types.InlineKeyboardButton(text='30', callback_data=f'minute_30')
+            minute_60 = types.InlineKeyboardButton(text='60', callback_data=f'minute_60')
+            minute_90 = types.InlineKeyboardButton(text='90', callback_data=f'minute_90')
+            minute_120 = types.InlineKeyboardButton(text='120', callback_data=f'minute_120')
+            keyboard.add(minute_5, minute_15, minute_30)
+            keyboard.add(minute_60, minute_90, minute_120)
+            bot.send_message(
+                request_time.user.telegram,
+                'Запрос дополнительного времени.\n Укажите, сколько минут вы хотите добавить (или просто проигнорируйте это сообщение).',
+                reply_markup=keyboard)
+            request_time.is_send = True
+            request_time.save()
         time.sleep(1.5)
 
 
@@ -159,6 +198,7 @@ def keyboard_handler(message):
         '🕒 Лимиты': limit,
         '🧑‍💻 Использовано': time_amount,
         '⛔️ Заблокировать': block,
+        '✅ Разблокировать': block,
     }
     if commands.get(message.text):
         commands[message.text](message)
@@ -256,11 +296,20 @@ def time_amount(message):
         hour, _ = get_humanize_time(f'{hour_limit - hour_session}:1')
     if minute_limit - minute_session > 0:
         _, minute = get_humanize_time(f'1:{minute_limit - minute_session}')
-    bot.send_message(chat_id, f'Осталось {hour} {minute} компьютерного времени')
+    hour_session, minute_session = get_humanize_time(f'{hour_session}:{minute_session}')
+    bot.send_message(chat_id,
+                     f'Использовано {hour_session} {minute_session}.\nОсталось {hour} {minute} компьютерного времени')
 
 
 def block(message):
-    pass
+    chat_id = message.chat.id
+    user = User.get_or_none(User.telegram == chat_id)
+    ban = Ban.get_or_create(user=user)
+    if ban[1]:
+        bot.send_message(chat_id, f'❌ Компьютер заблокирован!', reply_markup=get_standart_markup(True))
+    else:
+        ban[0].delete_instance()
+        bot.send_message(chat_id, f'✅ Компьютер разблокирован!', reply_markup=get_standart_markup())
 
 
 if __name__ == '__main__':

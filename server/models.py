@@ -63,12 +63,25 @@ class TimeDaySession(BaseModel):
     day = pw.DateField(default=datetime.date.today)
 
 
+class Ban(BaseModel):
+    user = pw.ForeignKeyField(User, related_name='control_date')
+
+
+class RequestTime(BaseModel):
+    user = pw.ForeignKeyField(User, related_name='control_date')
+    amount = pw.CharField(max_length=5, default='')
+    day = pw.DateField(default=datetime.date.today)
+    done = pw.BooleanField(default=False)
+    is_send = pw.BooleanField(default=False)
+
+
 User.create_table()
-BotText.create_table()
 ConfirmLogin.create_table()
 ControlDate.create_table()
 Adjustment.create_table()
 TimeDaySession.create_table()
+Ban.create_table()
+RequestTime.create_table()
 
 if __name__ == '__main__':
     User(telegram='test').save()

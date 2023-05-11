@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import QMessageBox, QSlider
 from custom_design import CustomDialog
 from design import UiAuthWindow, UiChildWindow
 from user.auth import AuthSystem, MAC
-from user.auth_model import ConfirmLogin, User, TimeDaySession, ControlDate
+from user.auth_model import ConfirmLogin, User, TimeDaySession, ControlDate, Ban, RequestTime
 
 PLATFORM = platform.system().lower()
 
@@ -67,6 +67,8 @@ class BaseWindow(QtWidgets.QMainWindow):
 
     def check_time_left(self):
         user = User.get(User.mac == MAC)
+        if (self._check_time_left() or Ban.get_or_none(user=user)) and not self.check_time_request():
+            return
         date_today = datetime.date.today()
         day_session = TimeDaySession.get_or_create(user=user, day=date_today)[0]
         time_ = day_session.time
@@ -78,6 +80,31 @@ class BaseWindow(QtWidgets.QMainWindow):
             new_hour += 1
         day_session.time = f'{new_hour}:{new_minute}'
         day_session.save()
+
+    def check_time_request(self):
+        user = User.get(User.mac == MAC)
+        date_today = datetime.date.today()
+        request_time = RequestTime.select().where(
+            RequestTime.user == user,
+            RequestTime.day == date_today,
+        )
+        if not request_time:
+            return False
+        request_time_amount = 0
+        for i in request_time:
+            if i.amount.isdigit():
+                request_time_amount += int(i.amount)
+        user = User.get(User.mac == MAC)
+        day_session = TimeDaySession.get_or_create(user=user, day=date_today)[0]
+        time_ = day_session.time
+        control_date = ControlDate.get_or_create(user=user)[0]
+        minutes_session = int(time_.split(':')[0]) * 60 + int(time_.split(':')[1])
+        max_time_this_day = getattr(control_date,
+                                    calendar.day_name[date_today.weekday()].lower())
+        max_time_this_day = int(max_time_this_day.split(':')[0]) * 60 + int(max_time_this_day.split(':')[1])
+        if request_time_amount + max_time_this_day - minutes_session > 0:
+            return True
+        return False
 
     def _check_time_left(self):
         user = User.get(User.mac == MAC)
@@ -91,7 +118,6 @@ class BaseWindow(QtWidgets.QMainWindow):
             max_time_this_day = getattr(control_date,
                                         calendar.day_name[date_today.weekday()].lower())
             max_time_this_day = int(max_time_this_day.split(':')[0]) * 60 + int(max_time_this_day.split(':')[1])
-
             if minutes >= max_time_this_day:
                 return True
 
@@ -171,6 +197,16 @@ class ChildWindow(BaseWindow, UiChildWindow):
             hour, minute = self.get_humanize_time(limit)
             self.label_2.setText(f'{hour} {minute}')
             return
+
+        date_today = datetime.date.today()
+        request_time = RequestTime.select().where(
+            RequestTime.user == user,
+            RequestTime.day == date_today,
+        )
+        status = True
+        if not request_time:
+            status = False
+
         hour_limit = int(limit.split(':')[0])
         minute_limit = int(limit.split(':')[1])
 
@@ -180,10 +216,21 @@ class ChildWindow(BaseWindow, UiChildWindow):
         hour = '0 часов'
         minute = '0 минут'
 
-        if hour_limit - hour_session > 0:
-            hour, _ = self.get_humanize_time(f'{hour_limit - hour_session}:1')
+        request_time_amount = 0
+        for i in request_time:
+            if i.amount.isdigit():
+                request_time_amount += int(i.amount)
+        if hour_limit + int(request_time_amount) // 60 - hour_session > 0:
+            if status:
+                hour, _ = self.get_humanize_time(f'{(hour_limit - hour_session + int(request_time_amount) // 60)}:1')
+            else:
+                hour, _ = self.get_humanize_time(f'{hour_limit - hour_session}:1')
         if minute_limit - minute_session > 0:
-            _, minute = self.get_humanize_time(f'1:{minute_limit - minute_session}')
+            if status:
+                _, minute = self.get_humanize_time(
+                    f'1:{(minute_limit - minute_session + int(request_time_amount)) % 60}')
+            else:
+                _, minute = self.get_humanize_time(f'1:{minute_limit - minute_session}')
         self.label_2.setText(f'{hour} {minute}')
 
     def get_humanize_time(self, time_):
@@ -192,6 +239,11 @@ class ChildWindow(BaseWindow, UiChildWindow):
         _minute = int(time_.split(":")[1])
         minute = f'{_minute} {self._correct_word(_minute, ("минут", "минута", "минуты",))}'
         return hour, minute
+
+    def handler_request_time(self):
+        user = User.get(User.mac == MAC)
+        request_time = RequestTime(user=user)
+        request_time.save()
 
     def _correct_word(self, number, lst):
         assert len(lst) == 3
@@ -220,7 +272,7 @@ class AuthWindow(BaseWindow, UiAuthWindow):
         self.timer_add_time.timeout.connect(self.check_time_left)
         self.timer_add_time.start()
 
-        self.timer_stop_cursor.setInterval(3000)
+        self.timer_stop_cursor.setInterval(1000)
         self.timer_stop_cursor.timeout.connect(self.stop_cursor)
         self.timer_stop_cursor.start()
 
@@ -243,7 +295,8 @@ class AuthWindow(BaseWindow, UiAuthWindow):
         msg.exec_()
 
     def stop_cursor(self):
-        if self._check_time_left():
+        user = User.get(User.mac == MAC)
+        if (self._check_time_left() and not self.check_time_request()) or Ban.get_or_none(user=user):
             self.child.setWindowFlag(Qt.WindowStaysOnTopHint, True)
             self.child.show()
             self.child.showMaximized()
@@ -254,7 +307,7 @@ class AuthWindow(BaseWindow, UiAuthWindow):
             self.child.label_2.move(width - self.child.label_2.width() + 375, self.child.label_2.y())
             self.child.line.move(width - self.child.line.width() + 375, self.child.line.y())
             self.child.request_time.move(width - self.child.request_time.width() + 175, self.child.request_time.y())
-            self.child.parent.move(width - self.child.parent.width() + 27, self.child.parent.y())
+            self.child.parent.move(width - self.child.parent.width() + 27999, self.child.parent.y())
 
             self.child.label_2.setText('Время вышло!')
             Status.time_stop = True
@@ -263,6 +316,11 @@ class AuthWindow(BaseWindow, UiAuthWindow):
             self.child.setWindowFlag(Qt.WindowStaysOnTopHint, False)
             self.child.show()
             self.child.showNormal()
+            self.child.label.move(40, 10)
+            self.child.label_2.move(390, 30)
+            self.child.line.move(0, 120)
+            self.child.request_time.move(200, 190)
+            self.child.parent.move(340, 365)
             Status.time_stop = False
 
     def handler_child(self, *args, **kwargs):

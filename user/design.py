@@ -14,7 +14,7 @@ class UiMainWindow:
         self.label_4.setGeometry(QtCore.QRect(210, 100, 321, 16))
         self.label_4.setObjectName("label_4")
         self.turn_parental_control = QtWidgets.QCheckBox(self.centralwidget)
-        self.turn_parental_control.setGeometry(QtCore.QRect(600, 20, 191, 20))
+        self.turn_parental_control.setGeometry(QtCore.QRect(600, 20000, 191, 20))
         self.turn_parental_control.setStyleSheet("border: 1px solid #adb5bd;\n"
                                                  "  border-radius: 0.25em;\n"
                                                  "  margin-right: 0.5em;\n"
@@ -31,7 +31,7 @@ class UiMainWindow:
                                            "cursor: pointer;")
         self.computer_button.setObjectName("pushButton")
         self.program_button = QtWidgets.QPushButton(self.centralwidget)
-        self.program_button.setGeometry(QtCore.QRect(10, 140, 171, 51))
+        self.program_button.setGeometry(QtCore.QRect(10, 14000, 171, 51))
         self.program_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
                                           "color: white;\n"
                                           "font-size: 16px;\n"
@@ -39,7 +39,7 @@ class UiMainWindow:
                                           "cursor: pointer;")
         self.program_button.setObjectName("pushButton_2")
         self.internet_button = QtWidgets.QPushButton(self.centralwidget)
-        self.internet_button.setGeometry(QtCore.QRect(10, 230, 171, 51))
+        self.internet_button.setGeometry(QtCore.QRect(10, 2300, 171, 51))
         self.internet_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
                                            "color: white;\n"
                                            "font-size: 16px;\n"
@@ -47,7 +47,7 @@ class UiMainWindow:
                                            "cursor: pointer;")
         self.internet_button.setObjectName("pushButton_3")
         self.communication_button = QtWidgets.QPushButton(self.centralwidget)
-        self.communication_button.setGeometry(QtCore.QRect(10, 320, 171, 51))
+        self.communication_button.setGeometry(QtCore.QRect(10, 3200, 171, 51))
         self.communication_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
                                                 "color: white;\n"
                                                 "font-size: 16px;\n"
@@ -55,7 +55,7 @@ class UiMainWindow:
                                                 "cursor: pointer;")
         self.communication_button.setObjectName("pushButton_4")
         self.content_button = QtWidgets.QPushButton(self.centralwidget)
-        self.content_button.setGeometry(QtCore.QRect(10, 400, 171, 51))
+        self.content_button.setGeometry(QtCore.QRect(10, 4000, 171, 51))
         self.content_button.setStyleSheet("background-color: rgb(75, 165, 148);\n"
                                           "color: white;\n"
                                           "font-size: 15px;\n"
@@ -63,7 +63,7 @@ class UiMainWindow:
                                           "cursor: pointer;")
         self.content_button.setObjectName("pushButton_5")
         self.button_details = QtWidgets.QPushButton(self.centralwidget)
-        self.button_details.setGeometry(QtCore.QRect(20, 500, 111, 31))
+        self.button_details.setGeometry(QtCore.QRect(20, 5000, 111, 31))
         self.button_details.setObjectName("pushButton_6")
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setGeometry(QtCore.QRect(10, 480, 171, 16))
@@ -201,12 +201,12 @@ class UiMainWindow:
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label_4.setText(_translate("MainWindow", "Ограничение доступа с понедельника по пятницу"))
-        self.turn_parental_control.setText(_translate("MainWindow", "Родительский контроль"))
+        # self.turn_parental_control.setText(_translate("MainWindow", "Родительский контроль"))
         self.computer_button.setText(_translate("MainWindow", "Компьютер"))
-        self.program_button.setText(_translate("MainWindow", "Программы"))
-        self.internet_button.setText(_translate("MainWindow", "Интернет"))
-        self.communication_button.setText(_translate("MainWindow", "Общение"))
-        self.content_button.setText(_translate("MainWindow", "Контроль содержания"))
+        # self.program_button.setText(_translate("MainWindow", "Программы"))
+        # self.internet_button.setText(_translate("MainWindow", "Интернет"))
+        # self.communication_button.setText(_translate("MainWindow", "Общение"))
+        # self.content_button.setText(_translate("MainWindow", "Контроль содержания"))
         self.button_details.setText(_translate("MainWindow", "Подробнее..."))
         self.label.setText(_translate("MainWindow", f"{self.username} - текущий пользователь"))
         self.label_2.setText(_translate("MainWindow", "Рабочие дни"))
@@ -455,8 +455,8 @@ class UiChildWindow:
         font.setPointSize(24)
         self.request_time.setFont(font)
         self.request_time.setStyleSheet("border-radius: 15px;\n"
-                                      "color: #fff;\n"
-                                      "background-color: #008fb3;")
+                                        "color: #fff;\n"
+                                        "background-color: #008fb3;")
         self.request_time.setObjectName("pushButton")
         font = QtGui.QFont()
         font.setPointSize(18)
@@ -477,6 +477,7 @@ class UiChildWindow:
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         self.parent.mousePressEvent = self.handler_parent
+        self.request_time.clicked.connect(self.handler_request_time)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
