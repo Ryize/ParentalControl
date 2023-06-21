@@ -1,7 +1,7 @@
 import datetime
 
 import peewee as pw
-from uuid import getnode as get_mac
+from uuid import getnode as mac
 
 from user.config import USER, PASSWORD, DB_NAME, HOST
 
@@ -14,7 +14,7 @@ db = pw.MySQLDatabase(
 
 
 def get_mac():
-    return str(get_mac())[:-1]
+    return str(mac())[:-1]
 
 
 class BaseModel(pw.Model):

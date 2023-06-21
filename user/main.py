@@ -31,6 +31,9 @@ IS_AUTH = True
 
 
 class Status:
+    """
+    Показывает статус таймера.
+    """
     time_stop: bool = False
 
 
@@ -295,7 +298,9 @@ class AuthWindow(BaseWindow, UiAuthWindow):
         msg.exec_()
 
     def stop_cursor(self):
-        user = User.get(User.mac == MAC)
+        user = User.get_or_none(User.mac == MAC)
+        if not user:
+            return
         if (self._check_time_left() and not self.check_time_request()) or Ban.get_or_none(user=user):
             self.child.setWindowFlag(Qt.WindowStaysOnTopHint, True)
             self.child.show()
